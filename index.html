@@ -14,6 +14,9 @@
   
   <!-- Nhúng Babel để chạy code JSX trực tiếp trên trình duyệt -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- Nhúng SheetJS để xuất file Excel -->
+  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased">
   <div id="root"></div>
@@ -35,6 +38,7 @@
     const ChevronDown = ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>;
     const ListTodo = ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="6" height="6" rx="1"/><path d="m3 17 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg>;
     const FilePlus = ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>;
+    const Download = ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>;
 
     // --- CONSTANTS & MOCK DATA ---
     const PHASES = [
@@ -361,6 +365,59 @@
         setActiveTab('list');
       };
 
+      // Hàm xử lý xuất file Excel
+      const handleExport = () => {
+        // Lấy tất cả các phase (bao gồm cả optional) để tạo cột
+        const allPhasesSet = new Set(PHASES);
+        projects.forEach(p => {
+          Object.keys(p.phases).forEach(phase => allPhasesSet.add(phase));
+        });
+        const allPhases = Array.from(allPhasesSet);
+
+        const excelData = projects.map(p => {
+          const owner = users.find(u => u.id === p.ownerId)?.name || 'Unassigned';
+
+          // Tính tổng số giờ
+          const preDesignHrs = parseFloat(p.phases['Pre-Design']?.hoursSpent || 0);
+          const totalDfmHrs = ['DFM - Wall Panels', 'DFM - Floor Cassette', 'DFM - Roof Panels', 'DFM - Lookouts']
+            .reduce((sum, phase) => sum + parseFloat(p.phases[phase]?.hoursSpent || 0), 0);
+          const updatesHrs = Object.keys(p.phases)
+            .filter(phase => !PHASES.includes(phase))
+            .reduce((sum, phase) => sum + parseFloat(p.phases[phase]?.hoursSpent || 0), 0);
+
+          const row = {
+            'Job Name': p.jobName,
+            'Priority': p.priority || '',
+            'Ref': p.ref || '',
+            'Received Date': p.receivedDate || '',
+            'Started Date': p.startedDate || '',
+            'Owner': owner,
+            'Due Date': p.dueDate || '',
+            'Building Type': p.buildingType || '',
+            'Pre-Design Hrs': preDesignHrs,
+            'Total DFM Hrs': totalDfmHrs,
+            'Updates Hrs': updatesHrs,
+            'Total Hrs': preDesignHrs + totalDfmHrs + updatesHrs
+          };
+
+          // Thêm chi tiết từng phase
+          allPhases.forEach(phase => {
+            const phaseData = p.phases[phase];
+            row[`${phase} - Progress`] = phaseData ? phaseData.progress : '';
+            row[`${phase} - Hrs`] = phaseData ? phaseData.hoursSpent : '';
+            row[`${phase} - Date Sent`] = phaseData ? phaseData.dateSent : '';
+          });
+
+          return row;
+        });
+
+        // Tạo và tải file
+        const worksheet = XLSX.utils.json_to_sheet(excelData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Report");
+        XLSX.writeFile(workbook, "WorkTracker_Report.xlsx");
+      };
+
       const staffUsers = users.filter(u => u.role === 'Staff');
 
       return (
@@ -382,7 +439,16 @@
                 Add New Job
               </button>
             </div>
-            <div className="text-sm font-bold text-slate-400">Total Jobs: {projects.length}</div>
+            <div className="flex items-center gap-4">
+              <div className="text-sm font-bold text-slate-400">Total Jobs: {projects.length}</div>
+              <button 
+                onClick={handleExport}
+                className="flex items-center gap-2 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 px-4 py-2 rounded-xl transition-colors text-sm font-bold shadow-sm"
+              >
+                <Download className="w-4 h-4" />
+                Export Report
+              </button>
+            </div>
           </div>
           
           <div className="p-6 bg-slate-50/30 min-h-[500px]">
