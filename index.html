@@ -5,40 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WorkTracker Dashboard</title>
   
-  <!-- Nhúng Tailwind CSS để style giao diện -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Nhúng thư viện React -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   
-  <!-- Nhúng Babel để chạy code JSX trực tiếp trên trình duyệt -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  
-  <!-- Nhúng SheetJS để xuất file Excel -->
   <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased">
   <div id="root"></div>
 
-  <!-- Sử dụng data-type="module" để Babel cho phép import Firebase -->
   <script type="text/babel" data-type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
     import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
     const { useState, useMemo, useEffect } = React;
 
-    // --- CẤU HÌNH FIREBASE CLOUD STORAGE ---
-    let app, auth, db, appId;
+    // =========================================================================
+    // 1. BẠN DÁN FIREBASE CONFIG CỦA BẠN VÀO ĐÂY
+    // =========================================================================
+    const firebaseConfig = {
+      // Ví dụ:
+      apiKey: "AIzaSyDyl2FoFZwKtFL6yb2sPEEWzJvBBzNK01A",
+            authDomain: "taskhub-c3f41.firebaseapp.com",
+            projectId: "taskhub-c3f41",
+            storageBucket: "taskhub-c3f41.firebasestorage.app",
+            messagingSenderId: "874827473111",
+            appId: "1:874827473111:web:cdbd7c6b8d5ece0d285092"
+    };
+
+    let app, auth, db;
     try {
-      const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-      app = initializeApp(firebaseConfig);
-      auth = getAuth(app);
-      db = getFirestore(app);
-      appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+      // Nếu không có config, tự hiểu là không dùng DB
+      if(Object.keys(firebaseConfig).length > 0) {
+          app = initializeApp(firebaseConfig);
+          auth = getAuth(app);
+          db = getFirestore(app);
+      }
     } catch (e) {
-      console.error("Firebase config is missing or invalid. App will not save data permanently.", e);
+      console.error("Firebase config error:", e);
     }
 
     // --- ICONS COMPONENTS (Inline SVGs) ---
@@ -83,6 +90,7 @@
       return phases;
     };
 
+    // Dữ liệu mẫu ban đầu nếu chưa có Firebase
     const INITIAL_USERS = [
       { id: 'm1', name: 'Kiet Vu', role: 'Manager' },
       { id: 's1', name: 'John Doe', role: 'Staff' },
@@ -93,7 +101,7 @@
       const [firebaseUser, setFirebaseUser] = useState(null);
       const [isDataLoaded, setIsDataLoaded] = useState(false);
       
-      const [users, setUsers] = useState([]);
+      const [users, setUsers] = useState(INITIAL_USERS);
       const [projects, setProjects] = useState([]);
       
       const [currentUser, setCurrentUser] = useState(null);
@@ -103,46 +111,41 @@
       const [selectedJob, setSelectedJob] = useState(null);
       const [showManageStaffModal, setShowManageStaffModal] = useState(false);
 
-      // 1. Firebase Auth Setup
+      // 1. Khởi tạo Auth
       useEffect(() => {
         if (!auth) {
-            setIsDataLoaded(true); // Fallback local if no Firebase
+            setIsDataLoaded(true); // Không có firebase -> Cho vô dùng local luôn
             return;
         }
-        const initAuth = async () => {
-          if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-            await signInWithCustomToken(auth, __initial_auth_token);
-          } else {
-            await signInAnonymously(auth);
-          }
-        };
-        initAuth();
+        
+        signInAnonymously(auth).catch(err => console.error("Auth error", err));
         const unsubscribe = onAuthStateChanged(auth, setFirebaseUser);
         return () => unsubscribe();
       }, []);
 
-      // 2. Fetch Data from Firestore
+      // 2. Fetch Data
       useEffect(() => {
-        if (!firebaseUser || !db) return;
+        if (!auth || !firebaseUser || !db) return;
 
         let isSeeding = false;
 
-        // Fetch Users
-        const usersRef = collection(db, 'artifacts', appId, 'public', 'data', 'team_users');
+        // Lưu ý: Đổi đường dẫn lưu trữ để không phụ thuộc vào `appId` môi trường ảo
+        // Thay vào đó, lưu thẳng vào collection root là 'users' và 'projects'
+        const usersRef = collection(db, 'users');
         const unsubUsers = onSnapshot(usersRef, (snapshot) => {
           const loadedUsers = [];
           snapshot.forEach(doc => loadedUsers.push(doc.data()));
 
           if (snapshot.empty && !isSeeding) {
             isSeeding = true;
-            INITIAL_USERS.forEach(u => setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'team_users', u.id), u));
+            // Tạo sẵn data manager nếu database trắng
+            INITIAL_USERS.forEach(u => setDoc(doc(db, 'users', u.id), u));
           } else {
             setUsers(loadedUsers);
           }
         });
 
-        // Fetch Projects
-        const projectsRef = collection(db, 'artifacts', appId, 'public', 'data', 'team_projects');
+        const projectsRef = collection(db, 'projects');
         const unsubProjects = onSnapshot(projectsRef, (snapshot) => {
           const loadedProjects = [];
           snapshot.forEach(doc => loadedProjects.push(doc.data()));
@@ -158,15 +161,20 @@
         e.preventDefault();
         if (!newStaffName.trim()) return;
         const newUser = { id: `s${Date.now()}`, name: newStaffName, role: 'Staff' };
+        
         if (db) {
-            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'team_users', newUser.id), newUser);
+            await setDoc(doc(db, 'users', newUser.id), newUser);
+        } else {
+            setUsers([...users, newUser]); // Chạy local
         }
         setNewStaffName('');
       };
 
       const handleRemoveStaff = async (userId) => {
         if (db) {
-            await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'team_users', userId));
+            await deleteDoc(doc(db, 'users', userId));
+        } else {
+            setUsers(users.filter(u => u.id !== userId)); // Chạy local
         }
         if (currentUser && currentUser.id === userId) {
           setCurrentUser(null);
@@ -178,14 +186,18 @@
       const handleSaveJobDetails = async (jobId, updatedData) => {
         if (db) {
             const existing = projects.find(p => p.id === jobId);
-            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'team_projects', jobId), { ...existing, ...updatedData });
+            await setDoc(doc(db, 'projects', jobId), { ...existing, ...updatedData });
+        } else {
+            setProjects(projects.map(p => p.id === jobId ? { ...p, ...updatedData } : p)); // Chạy local
         }
         setSelectedJob(null);
       };
 
       const handleDeleteJob = async (jobId) => {
         if (db) {
-            await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'team_projects', jobId));
+            await deleteDoc(doc(db, 'projects', jobId));
+        } else {
+            setProjects(projects.filter(p => p.id !== jobId)); // Chạy local
         }
         setSelectedJob(null);
       };
@@ -195,12 +207,12 @@
         if (user) setCurrentUser(user);
       };
 
-      // Loading screen
       if (!isDataLoaded) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-cyan-50 flex flex-col items-center justify-center p-4">
                 <div className="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mb-4"></div>
                 <h2 className="text-xl font-bold text-slate-700">Connecting to Cloud Storage...</h2>
+                <p className="text-sm text-slate-500 mt-2">Checking Database Config...</p>
             </div>
         );
       }
@@ -217,6 +229,7 @@
                   WorkTracker
                 </h1>
                 <p className="text-gray-500 mt-2">Log in to your workspace</p>
+                {!db && <p className="text-xs text-red-500 mt-1 font-bold">⚠️ No Firebase Config - Local mode only (Data will be lost on refresh)</p>}
               </div>
               
               <div className="space-y-4 mb-8">
@@ -313,6 +326,8 @@
               <ManagerDashboard 
                 users={users} 
                 projects={projects}
+                setProjects={setProjects}
+                db={db}
                 onJobClick={setSelectedJob}
               />
             ) : (
@@ -406,7 +421,7 @@
     }
 
     // --- MANAGER DASHBOARD ---
-    function ManagerDashboard({ users, projects, onJobClick }) {
+    function ManagerDashboard({ users, projects, setProjects, db, onJobClick }) {
       const [activeTab, setActiveTab] = useState('list');
       
       const [newJob, setNewJob] = useState({ 
@@ -423,9 +438,10 @@
           phases: generateInitialPhases()
         };
         
-        // Push directly to Firestore instead of local state array
         if (db) {
-            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'team_projects', project.id), project);
+            await setDoc(doc(db, 'projects', project.id), project);
+        } else {
+            setProjects([...projects, project]); // Chạy local
         }
 
         setNewJob({ jobName: '', ref: '', receivedDate: '', startedDate: '', ownerId: '', dueDate: '', buildingType: '', priority: 'Medium' });
