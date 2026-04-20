@@ -1,0 +1,812 @@
+import React, { useState, useMemo } from 'react';
+import { FolderGit2, LogOut, Plus, X, UserPlus, FileText, Trash2, Users, ArrowUpDown, ChevronUp, ChevronDown, ListTodo, FilePlus } from 'lucide-react';
+
+// --- CONSTANTS & MOCK DATA ---
+const PHASES = [
+  'Pre-Design',
+  'DFM - Wall Panels',
+  'DFM - Floor Cassette',
+  'DFM - Roof Panels',
+  'DFM - Lookouts'
+];
+
+const PROGRESS_STATUSES = ['Not Started', 'In Progress', 'On Hold', 'Completed'];
+
+const BUILDING_TYPES = ['Bungalow', '2-Storey', '2.5-Storey'];
+
+const PRIORITIES = ['High', 'Medium', 'Low', 'Completed'];
+
+const PRIORITY_STYLES = {
+  'High': 'bg-red-50 text-red-700 border-red-200',
+  'Medium': 'bg-orange-50 text-orange-700 border-orange-200',
+  'Low': 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  'Completed': 'bg-emerald-500 text-white border-emerald-600'
+};
+
+// Bright colors for Owners
+const OWNER_COLORS = [
+  'text-rose-600', 'text-violet-600', 'text-emerald-600', 
+  'text-amber-600', 'text-cyan-600', 'text-fuchsia-600',
+  'text-blue-600', 'text-orange-600'
+];
+
+const generateInitialPhases = () => {
+  const phases = {};
+  PHASES.forEach(p => {
+    phases[p] = { progress: 'Not Started', hoursSpent: 0, dateSent: '' };
+  });
+  return phases;
+};
+
+const INITIAL_USERS = [
+  { id: 'm1', name: 'Kiet Vu', role: 'Manager' },
+  { id: 's1', name: 'John Doe', role: 'Staff' },
+  { id: 's2', name: 'Jane Smith', role: 'Staff' },
+];
+
+const INITIAL_PROJECTS = [
+  { 
+    id: 'p1', 
+    jobName: 'Alpha Tower',
+    ref: 'REF-001',
+    receivedDate: '2026-04-10',
+    startedDate: '2026-04-12',
+    ownerId: 's1', 
+    dueDate: '2026-05-20',
+    buildingType: '2-Storey',
+    priority: 'High',
+    phases: generateInitialPhases()
+  }
+];
+
+export default function App() {
+  const [users, setUsers] = useState(INITIAL_USERS);
+  const [projects, setProjects] = useState(INITIAL_PROJECTS);
+  const [currentUser, setCurrentUser] = useState(null);
+  
+  // States for Home/Login screen
+  const [selectedUserId, setSelectedUserId] = useState('');
+  const [newStaffName, setNewStaffName] = useState('');
+
+  // States for Modal
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [showManageStaffModal, setShowManageStaffModal] = useState(false);
+
+  // --- HANDLERS ---
+  const handleLogin = () => {
+    const user = users.find(u => u.id === selectedUserId);
+    if (user) setCurrentUser(user);
+  };
+
+  const handleCreateStaff = (e) => {
+    e.preventDefault();
+    if (!newStaffName.trim()) return;
+    const newUser = {
+      id: `s${Date.now()}`,
+      name: newStaffName,
+      role: 'Staff'
+    };
+    setUsers([...users, newUser]);
+    setNewStaffName('');
+  };
+
+  const handleRemoveStaff = (userId) => {
+    setUsers(users.filter(u => u.id !== userId));
+    if (currentUser && currentUser.id === userId) {
+      setCurrentUser(null);
+      setSelectedUserId('');
+      setShowManageStaffModal(false);
+    }
+  };
+
+  const handleSaveJobDetails = (jobId, updatedData) => {
+    setProjects(projects.map(p => p.id === jobId ? { ...p, ...updatedData } : p));
+    setSelectedJob(null);
+  };
+
+  // --- LOGIN VIEW (HOME) ---
+  if (!currentUser) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-cyan-50 flex items-center justify-center p-4">
+        <div className="bg-white/80 backdrop-blur-xl p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] max-w-md w-full border border-white">
+          <div className="text-center mb-6">
+            <div className="bg-gradient-to-tr from-indigo-600 to-cyan-500 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg transform rotate-3 hover:rotate-6 transition-transform">
+              <FolderGit2 className="text-white w-8 h-8" />
+            </div>
+            <h1 className="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-700 to-cyan-600">
+              WorkTracker
+            </h1>
+            <p className="text-gray-500 mt-2">Log in to your workspace</p>
+          </div>
+          
+          <div className="space-y-4 mb-8">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Select User</label>
+              <select 
+                value={selectedUserId}
+                onChange={(e) => setSelectedUserId(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none bg-white/50"
+              >
+                <option value="">-- Choose your account --</option>
+                <optgroup label="Manager">
+                  {users.filter(u => u.role === 'Manager').map(u => (
+                    <option key={u.id} value={u.id}>{u.name}</option>
+                  ))}
+                </optgroup>
+                <optgroup label="Staff">
+                  {users.filter(u => u.role === 'Staff').map(u => (
+                    <option key={u.id} value={u.id}>{u.name}</option>
+                  ))}
+                </optgroup>
+              </select>
+            </div>
+            <button 
+              onClick={handleLogin}
+              disabled={!selectedUserId}
+              className="w-full bg-gradient-to-r from-indigo-600 to-cyan-500 text-white py-3 rounded-xl hover:from-indigo-700 hover:to-cyan-600 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed transition-all font-bold shadow-md hover:shadow-lg"
+            >
+              Login
+            </button>
+          </div>
+
+          <div className="border-t border-gray-200 pt-6">
+            <div className="flex items-center gap-2 mb-4 text-indigo-700">
+              <UserPlus className="w-5 h-5" />
+              <h2 className="font-bold">Create New Staff</h2>
+            </div>
+            <form onSubmit={handleCreateStaff} className="flex gap-2">
+              <input 
+                type="text" 
+                placeholder="Staff name..." 
+                value={newStaffName}
+                onChange={(e) => setNewStaffName(e.target.value)}
+                className="flex-1 px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white/50"
+              />
+              <button type="submit" className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-5 py-2 rounded-xl hover:from-emerald-600 hover:to-teal-600 transition-colors text-sm font-bold shadow-sm">
+                Add
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // --- MAIN LAYOUT ---
+  return (
+    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
+      <header className="bg-gradient-to-r from-indigo-700 via-purple-600 to-cyan-600 shadow-md px-6 py-4 flex justify-between items-center text-white">
+        <div className="flex items-center gap-3">
+          <div className="bg-white/20 p-2 rounded-xl backdrop-blur-sm border border-white/10">
+            <FolderGit2 className="text-white w-6 h-6" />
+          </div>
+          <h1 className="text-2xl font-extrabold tracking-tight">WorkTracker</h1>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="text-sm bg-black/20 px-4 py-1.5 rounded-full flex items-center gap-2 backdrop-blur-sm border border-white/10">
+            <span className="text-indigo-100">User:</span>
+            <span className="font-bold">{currentUser.name}</span>
+            <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full font-bold ${currentUser.role === 'Manager' ? 'bg-fuchsia-500 text-white' : 'bg-emerald-400 text-emerald-950'}`}>
+              {currentUser.role}
+            </span>
+          </div>
+          <div className="flex gap-2">
+            <button 
+              onClick={() => setShowManageStaffModal(true)}
+              className="flex items-center gap-2 text-white hover:bg-white/20 px-3 py-2 rounded-xl transition-colors text-sm font-semibold border border-transparent hover:border-white/20"
+            >
+              <Users className="w-4 h-4" />
+              Manage Staff
+            </button>
+            <button 
+              onClick={() => {setCurrentUser(null); setSelectedUserId('');}}
+              className="flex items-center gap-2 bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-xl transition-colors text-sm font-semibold shadow-sm"
+            >
+              <LogOut className="w-4 h-4" />
+              Logout
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main className="flex-1 max-w-7xl w-full mx-auto p-6">
+        {currentUser.role === 'Manager' ? (
+          <ManagerDashboard 
+            users={users} 
+            projects={projects} setProjects={setProjects} 
+            onJobClick={setSelectedJob}
+          />
+        ) : (
+          <StaffDashboard 
+            currentUser={currentUser} users={users}
+            projects={projects} 
+            onJobClick={setSelectedJob}
+          />
+        )}
+      </main>
+
+      {/* POP-OUT MODAL */}
+      {selectedJob && (
+        <JobProgressModal 
+          job={selectedJob} 
+          currentUser={currentUser}
+          users={users}
+          onClose={() => setSelectedJob(null)} 
+          onSave={handleSaveJobDetails}
+        />
+      )}
+
+      {/* MANAGE STAFF MODAL */}
+      {showManageStaffModal && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col max-h-[80vh] border border-gray-100">
+            <div className="px-6 py-5 border-b flex justify-between items-center bg-gradient-to-r from-slate-50 to-white">
+              <h2 className="text-xl font-extrabold text-slate-800 flex items-center gap-2">
+                <Users className="w-6 h-6 text-indigo-600" />
+                Manage Staff
+              </h2>
+              <button onClick={() => setShowManageStaffModal(false)} className="p-2 hover:bg-rose-50 text-slate-400 hover:text-rose-500 rounded-full transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="p-6 overflow-y-auto bg-slate-50/50">
+              <form onSubmit={handleCreateStaff} className="mb-8 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                <label className="block text-sm font-bold text-slate-700 mb-2">Create New Staff</label>
+                <div className="flex gap-2">
+                  <input 
+                    type="text" 
+                    placeholder="Enter full name..." 
+                    value={newStaffName}
+                    onChange={(e) => setNewStaffName(e.target.value)}
+                    className="flex-1 px-4 py-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors"
+                    required
+                  />
+                  <button type="submit" className="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-cyan-500 text-white rounded-lg hover:from-indigo-700 hover:to-cyan-600 font-bold text-sm shadow-sm transition-all">
+                    Add
+                  </button>
+                </div>
+              </form>
+
+              <div>
+                <label className="block text-sm font-bold text-slate-700 mb-3">Existing Staff</label>
+                <div className="space-y-2">
+                  {users.filter(u => u.role === 'Staff').length === 0 ? (
+                    <div className="text-center py-8 bg-white rounded-xl border border-dashed border-gray-300">
+                      <p className="text-sm text-slate-500">No staff members found.</p>
+                    </div>
+                  ) : (
+                    users.filter(u => u.role === 'Staff').map((user, idx) => {
+                      const userColor = OWNER_COLORS[idx % OWNER_COLORS.length];
+                      return (
+                        <div key={user.id} className="flex justify-between items-center bg-white p-3 rounded-xl border border-gray-100 shadow-sm hover:border-indigo-100 transition-colors">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm bg-slate-50 ${userColor}`}>
+                              {user.name.charAt(0).toUpperCase()}
+                            </div>
+                            <span className={`text-sm font-bold ${userColor}`}>{user.name}</span>
+                          </div>
+                          <button 
+                            onClick={() => handleRemoveStaff(user.id)}
+                            className="p-2 text-slate-400 hover:bg-rose-50 hover:text-rose-600 rounded-lg transition-colors"
+                            title="Remove Staff"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      )
+                    })
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// --- MANAGER DASHBOARD ---
+function ManagerDashboard({ users, projects, setProjects, onJobClick }) {
+  const [activeTab, setActiveTab] = useState('list'); // 'list' | 'add'
+  
+  const [newJob, setNewJob] = useState({ 
+    jobName: '', ref: '', receivedDate: '', startedDate: '', ownerId: '', dueDate: '', buildingType: '', priority: 'Medium' 
+  });
+
+  const handleCreateJob = (e) => {
+    e.preventDefault();
+    if (!newJob.jobName.trim()) return;
+    
+    const project = {
+      id: `p${Date.now()}`,
+      ...newJob,
+      phases: generateInitialPhases()
+    };
+    setProjects([...projects, project]);
+    setNewJob({ jobName: '', ref: '', receivedDate: '', startedDate: '', ownerId: '', dueDate: '', buildingType: '', priority: 'Medium' });
+    setActiveTab('list'); // Return to list after creation
+  };
+
+  const staffUsers = users.filter(u => u.role === 'Staff');
+
+  return (
+    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+      {/* Tabs Header */}
+      <div className="flex items-center justify-between border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white pr-6">
+        <div className="flex">
+          <button 
+            onClick={() => setActiveTab('list')}
+            className={`px-6 py-5 flex items-center gap-2 font-bold transition-all border-b-2 ${activeTab === 'list' ? 'border-indigo-600 text-indigo-700 bg-white' : 'border-transparent text-slate-500 hover:bg-slate-100'}`}
+          >
+            <ListTodo className="w-5 h-5" />
+            Job List
+          </button>
+          <button 
+            onClick={() => setActiveTab('add')}
+            className={`px-6 py-5 flex items-center gap-2 font-bold transition-all border-b-2 ${activeTab === 'add' ? 'border-indigo-600 text-indigo-700 bg-white' : 'border-transparent text-slate-500 hover:bg-slate-100'}`}
+          >
+            <FilePlus className="w-5 h-5" />
+            Add New Job
+          </button>
+        </div>
+        <div className="text-sm font-bold text-slate-400">Total Jobs: {projects.length}</div>
+      </div>
+      
+      <div className="p-6 bg-slate-50/30 min-h-[500px]">
+        
+        {/* ADD TAB CONTENT */}
+        {activeTab === 'add' && (
+          <form onSubmit={handleCreateJob} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 max-w-4xl mx-auto">
+            <h3 className="text-lg font-extrabold text-slate-800 mb-6 flex items-center gap-2 border-b pb-4">
+              <Plus className="w-5 h-5 text-indigo-500" />
+              Job Details
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="flex flex-col gap-1 lg:col-span-2">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Job Name *</label>
+                <input type="text" required value={newJob.jobName} onChange={e => setNewJob({...newJob, jobName: e.target.value})} className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors" />
+              </div>
+              
+              <div className="flex flex-col gap-1">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Ref</label>
+            <input type="text" value={newJob.ref} onChange={e => setNewJob({...newJob, ref: e.target.value})} className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors" />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Received Date *</label>
+            <input type="date" required value={newJob.receivedDate} onChange={e => setNewJob({...newJob, receivedDate: e.target.value})} className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors" />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Started Date</label>
+            <input type="date" value={newJob.startedDate} onChange={e => setNewJob({...newJob, startedDate: e.target.value})} className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors" />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Due Date *</label>
+            <input type="date" required value={newJob.dueDate} onChange={e => setNewJob({...newJob, dueDate: e.target.value})} className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors" />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Owner</label>
+            <select value={newJob.ownerId} onChange={e => setNewJob({...newJob, ownerId: e.target.value})} className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors">
+              <option value="">Select Owner...</option>
+              {staffUsers.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+            </select>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Building Type *</label>
+            <select required value={newJob.buildingType} onChange={e => setNewJob({...newJob, buildingType: e.target.value})} className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors">
+              <option value="">Select Type...</option>
+              {BUILDING_TYPES.map(type => <option key={type} value={type}>{type}</option>)}
+            </select>
+          </div>
+
+          <div className="flex flex-col gap-1">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Received Date</label>
+                <input type="date" value={newJob.receivedDate} onChange={e => setNewJob({...newJob, receivedDate: e.target.value})} className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors" />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Started Date</label>
+                <input type="date" value={newJob.startedDate} onChange={e => setNewJob({...newJob, startedDate: e.target.value})} className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors" />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Due Date</label>
+                <input type="date" value={newJob.dueDate} onChange={e => setNewJob({...newJob, dueDate: e.target.value})} className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors" />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Owner *</label>
+                <select required value={newJob.ownerId} onChange={e => setNewJob({...newJob, ownerId: e.target.value})} className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors">
+                  <option value="">Select Owner...</option>
+                  {staffUsers.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Building Type</label>
+                <select value={newJob.buildingType} onChange={e => setNewJob({...newJob, buildingType: e.target.value})} className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors">
+                  <option value="">Select Type...</option>
+                  {BUILDING_TYPES.map(type => <option key={type} value={type}>{type}</option>)}
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Priority Tag</label>
+                <select value={newJob.priority} onChange={e => setNewJob({...newJob, priority: e.target.value})} className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors font-semibold">
+                  {PRIORITIES.map(pri => <option key={pri} value={pri}>{pri} Priority</option>)}
+                </select>
+              </div>
+              
+              <div className="lg:col-span-3 flex justify-end mt-4 pt-4 border-t border-slate-100">
+                <button type="button" onClick={() => setActiveTab('list')} className="px-6 py-3 text-slate-600 font-bold hover:bg-slate-100 rounded-xl transition-colors mr-3 text-sm">
+                  Cancel
+                </button>
+                <button type="submit" className="bg-gradient-to-r from-indigo-600 to-cyan-500 text-white px-8 py-3 rounded-xl hover:from-indigo-700 hover:to-cyan-600 shadow-md transition-all flex items-center gap-2 text-sm font-bold">
+                  <Plus className="w-5 h-5" /> Create Job
+                </button>
+              </div>
+            </div>
+          </form>
+        )}
+
+        {/* LIST TAB CONTENT */}
+        {activeTab === 'list' && (
+          <JobsTable projects={projects} users={users} onJobClick={onJobClick} />
+        )}
+      </div>
+    </div>
+  );
+}
+
+// --- STAFF DASHBOARD ---
+function StaffDashboard({ currentUser, projects, users, onJobClick }) {
+  const myProjects = projects.filter(p => p.ownerId === currentUser.id);
+
+  return (
+    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+      <div className="p-6 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+        <h2 className="text-xl font-extrabold text-slate-800 flex items-center gap-2">
+          <FileText className="w-6 h-6 text-indigo-600" />
+          My Assigned Jobs
+        </h2>
+        <p className="text-sm text-slate-500 mt-1">Click on any job row to update phase progress and hours.</p>
+      </div>
+      <div className="p-6 bg-slate-50/30">
+        <JobsTable projects={myProjects} users={users} onJobClick={onJobClick} />
+      </div>
+    </div>
+  );
+}
+
+// --- SHARED TABLE COMPONENT WITH SORTING ---
+function JobsTable({ projects, users, onJobClick }) {
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+
+  const sortedProjects = useMemo(() => {
+    let sortableItems = [...projects];
+    if (sortConfig.key !== null) {
+      sortableItems.sort((a, b) => {
+        let aValue = a[sortConfig.key];
+        let bValue = b[sortConfig.key];
+
+        // Handle Owner sorting by name instead of ID
+        if (sortConfig.key === 'ownerId') {
+          aValue = users.find(u => u.id === aValue)?.name || '';
+          bValue = users.find(u => u.id === bValue)?.name || '';
+        }
+
+        // Handle Priority sorting manually (High -> Medium -> Low)
+        if (sortConfig.key === 'priority') {
+          const priorityWeights = { 'High': 3, 'Medium': 2, 'Low': 1 };
+          aValue = priorityWeights[aValue] || 0;
+          bValue = priorityWeights[bValue] || 0;
+        }
+
+        // Fallback for null/undefined strings
+        aValue = aValue || '';
+        bValue = bValue || '';
+
+        if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+        if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+    return sortableItems;
+  }, [projects, sortConfig, users]);
+
+  const requestSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const getSortIcon = (columnName) => {
+    if (sortConfig.key !== columnName) {
+      return <ArrowUpDown className="w-3 h-3 text-slate-300 group-hover:text-slate-400" />;
+    }
+    return sortConfig.direction === 'asc' 
+      ? <ChevronUp className="w-3 h-3 text-indigo-600" /> 
+      : <ChevronDown className="w-3 h-3 text-indigo-600" />;
+  };
+
+  const staffUsers = users.filter(u => u.role === 'Staff');
+  const getUserColor = (userId) => {
+    if (!userId) return 'text-slate-400';
+    const idx = staffUsers.findIndex(u => u.id === userId);
+    return OWNER_COLORS[Math.max(0, idx) % OWNER_COLORS.length];
+  };
+
+  return (
+    <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+      <table className="w-full text-sm text-left whitespace-nowrap">
+        <thead className="text-[11px] text-slate-500 uppercase tracking-wider bg-slate-50/80 border-b border-slate-200 font-bold">
+          <tr>
+            {[
+              { label: 'Job Name', key: 'jobName' },
+              { label: 'Priority', key: 'priority' },
+              { label: 'Ref', key: 'ref' },
+              { label: 'Received Date', key: 'receivedDate' },
+              { label: 'Started Date', key: 'startedDate' },
+              { label: 'Owner', key: 'ownerId' },
+              { label: 'Due Date', key: 'dueDate' },
+              { label: 'Building Type', key: 'buildingType' },
+            ].map(col => (
+              <th 
+                key={col.key}
+                onClick={() => requestSort(col.key)}
+                className="px-5 py-4 cursor-pointer hover:bg-slate-100 transition-colors group"
+              >
+                <div className="flex items-center gap-1.5">
+                  {col.label}
+                  {getSortIcon(col.key)}
+                </div>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-slate-100">
+          {sortedProjects.length === 0 ? (
+            <tr>
+              <td colSpan="8" className="px-5 py-12 text-center text-slate-400 bg-white">
+                <div className="flex flex-col items-center justify-center">
+                  <FileText className="w-10 h-10 text-slate-200 mb-2" />
+                  <p>No jobs found.</p>
+                </div>
+              </td>
+            </tr>
+          ) : sortedProjects.map(p => {
+        const owner = users.find(u => u.id === p.ownerId)?.name || 'Unassigned';
+        const ownerColorClass = getUserColor(p.ownerId);
+        const priorityClass = PRIORITY_STYLES[p.priority] || PRIORITY_STYLES['Low'];
+
+        return (
+              <tr 
+                key={p.id} 
+                onClick={() => onJobClick(p)}
+                className="hover:bg-indigo-50/50 cursor-pointer transition-colors bg-white group"
+                title="Click to view/edit phases"
+              >
+                <td className="px-5 py-3.5 font-bold text-indigo-700 group-hover:text-indigo-800">{p.jobName}</td>
+                <td className="px-5 py-3.5">
+                  <span className={`px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold border ${priorityClass}`}>
+                    {p.priority}
+                  </span>
+                </td>
+                <td className="px-5 py-3.5 text-slate-600 font-mono text-xs">{p.ref || '-'}</td>
+                <td className="px-5 py-3.5 text-slate-600">{p.receivedDate || '-'}</td>
+                <td className="px-5 py-3.5 text-slate-600">{p.startedDate || '-'}</td>
+            <td className={`px-5 py-3.5 font-extrabold ${ownerColorClass}`}>
+              <span className="bg-slate-50 px-2.5 py-1 rounded-md border border-slate-100 shadow-sm">{owner}</span>
+            </td>
+            <td className="px-5 py-3.5 text-slate-600 font-medium">{p.dueDate || '-'}</td>
+                <td className="px-5 py-3.5">
+                  {p.buildingType ? (
+                    <span className="px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                      {p.buildingType}
+                    </span>
+                  ) : '-'}
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+// --- JOB PROGRESS MODAL ---
+function JobProgressModal({ job, currentUser, users, onClose, onSave }) {
+  const [phasesForm, setPhasesForm] = useState({ ...job.phases });
+  const [jobInfoForm, setJobInfoForm] = useState({
+    priority: job.priority || 'Medium',
+    ref: job.ref || '',
+    ownerId: job.ownerId || '',
+    startedDate: job.startedDate || ''
+  });
+  
+  // Staff can only edit their own project. Manager can edit all.
+  const isEditable = currentUser.role === 'Manager' || job.ownerId === currentUser.id;
+
+  const handlePhaseChange = (phaseName, field, value) => {
+    setPhasesForm(prev => ({
+      ...prev,
+      [phaseName]: {
+        ...prev[phaseName],
+        [field]: value
+      }
+    }));
+  };
+
+  const handleInfoChange = (field, value) => {
+    setJobInfoForm(prev => ({ ...prev, [field]: value }));
+  };
+  
+  const priorityClass = PRIORITY_STYLES[jobInfoForm.priority] || PRIORITY_STYLES['Low'];
+  const staffUsers = users.filter(u => u.role === 'Staff');
+
+  return (
+    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-2xl shadow-[0_20px_50px_rgba(8,_112,_184,_0.15)] w-full max-w-4xl overflow-hidden flex flex-col max-h-[90vh] border border-white">
+        
+        {/* Modal Header */}
+        <div className="px-6 py-5 border-b flex justify-between items-start bg-gradient-to-r from-indigo-50 to-white">
+          <div className="flex-1 pr-4">
+            <div className="flex items-center gap-3">
+              <h2 className="text-2xl font-extrabold text-indigo-900">{job.jobName}</h2>
+              {isEditable ? (
+                <select 
+                  value={jobInfoForm.priority}
+                  onChange={e => handleInfoChange('priority', e.target.value)}
+                  className={`px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold border outline-none cursor-pointer ${priorityClass}`}
+                >
+                  {PRIORITIES.map(pri => (
+                    <option key={pri} value={pri} className="bg-white text-slate-800">
+                      {pri} {pri !== 'Completed' && 'Priority'}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <span className={`px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold border ${priorityClass}`}>
+                  {jobInfoForm.priority} {jobInfoForm.priority !== 'Completed' && 'Priority'}
+                </span>
+              )}
+            </div>
+            
+            <div className="flex flex-wrap gap-4 mt-4 bg-white/50 p-3 rounded-xl border border-indigo-100/50">
+              <div className="flex flex-col gap-1">
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Ref</span>
+                {isEditable ? (
+                  <input type="text" value={jobInfoForm.ref} onChange={e => handleInfoChange('ref', e.target.value)} className="px-2 py-1 text-xs border border-slate-200 rounded focus:ring-1 focus:ring-indigo-500 outline-none" placeholder="Enter Ref..." />
+                ) : (
+                  <span className="text-xs font-bold text-slate-700">{jobInfoForm.ref || 'N/A'}</span>
+                )}
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Started Date</span>
+                {isEditable ? (
+                  <input type="date" value={jobInfoForm.startedDate} onChange={e => handleInfoChange('startedDate', e.target.value)} className="px-2 py-1 text-xs border border-slate-200 rounded focus:ring-1 focus:ring-indigo-500 outline-none" />
+                ) : (
+                  <span className="text-xs font-bold text-slate-700">{jobInfoForm.startedDate || '-'}</span>
+                )}
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Owner</span>
+                {isEditable && currentUser.role === 'Manager' ? (
+                  <select value={jobInfoForm.ownerId} onChange={e => handleInfoChange('ownerId', e.target.value)} className="px-2 py-1 text-xs border border-slate-200 rounded focus:ring-1 focus:ring-indigo-500 outline-none">
+                    <option value="">Unassigned</option>
+                    {staffUsers.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+                  </select>
+                ) : (
+                  <span className="text-xs font-bold text-indigo-600">{users.find(u => u.id === jobInfoForm.ownerId)?.name || 'Unassigned'}</span>
+                )}
+              </div>
+            </div>
+          </div>
+          <button onClick={onClose} className="p-2 bg-white hover:bg-rose-50 text-slate-400 hover:text-rose-500 rounded-full transition-colors shadow-sm border border-slate-100 shrink-0">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Modal Body */}
+        <div className="p-6 overflow-y-auto flex-1 bg-slate-50/50">
+          <div className="rounded-xl border border-slate-200 overflow-hidden bg-white shadow-sm">
+            <table className="w-full text-sm text-left">
+              <thead className="text-[11px] font-bold text-slate-500 uppercase tracking-wider bg-slate-50 border-b border-slate-200">
+                <tr>
+                  <th className="px-5 py-4 w-1/3">Phase</th>
+                  <th className="px-5 py-4">Progress</th>
+                  <th className="px-5 py-4">Hours Spent</th>
+                  <th className="px-5 py-4">Date Sent</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {PHASES.map((phaseName, index) => {
+                  const data = phasesForm[phaseName];
+                  const isEven = index % 2 === 0;
+                  return (
+                    <tr key={phaseName} className={`hover:bg-indigo-50/30 transition-colors ${isEven ? 'bg-white' : 'bg-slate-50/30'}`}>
+                      <td className="px-5 py-4 font-bold text-slate-700">{phaseName}</td>
+                      
+                      <td className="px-5 py-4">
+                        {isEditable ? (
+                          <select 
+                            value={data.progress}
+                            onChange={(e) => handlePhaseChange(phaseName, 'progress', e.target.value)}
+                            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm bg-white font-medium shadow-sm"
+                          >
+                            {PROGRESS_STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
+                          </select>
+                        ) : (
+                          <span className={`px-2.5 py-1 rounded-md text-xs font-bold border 
+                            ${data.progress === 'Completed' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 
+                              data.progress === 'In Progress' ? 'bg-blue-50 text-blue-700 border-blue-200' : 
+                              data.progress === 'On Hold' ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                              'bg-slate-100 text-slate-600 border-slate-200'}`}>
+                            {data.progress}
+                          </span>
+                        )}
+                      </td>
+
+                      <td className="px-5 py-4">
+                        {isEditable ? (
+                          <div className="relative">
+                            <input 
+                              type="number" min="0" step="0.5"
+                              value={data.hoursSpent}
+                              onChange={(e) => handlePhaseChange(phaseName, 'hoursSpent', parseFloat(e.target.value) || 0)}
+                              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm font-mono bg-white shadow-sm pr-10"
+                            />
+                            <span className="absolute right-3 top-2 text-xs font-bold text-slate-400">hrs</span>
+                          </div>
+                        ) : (
+                          <span className="font-mono bg-slate-100 px-2 py-1 rounded text-slate-600 text-xs font-bold border border-slate-200 shadow-sm">{data.hoursSpent} hrs</span>
+                        )}
+                      </td>
+
+                      <td className="px-5 py-4">
+                        {isEditable ? (
+                          <input 
+                            type="date" 
+                            value={data.dateSent}
+                            onChange={(e) => handlePhaseChange(phaseName, 'dateSent', e.target.value)}
+                            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm bg-white shadow-sm font-medium"
+                          />
+                        ) : (
+                          <span className="text-slate-600 font-medium">{data.dateSent || '-'}</span>
+                        )}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Modal Footer */}
+        <div className="px-6 py-5 border-t border-slate-200 bg-white flex justify-end gap-3">
+          <button onClick={onClose} className="px-5 py-2.5 border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-700 font-bold text-sm transition-colors">
+            {isEditable ? 'Cancel' : 'Close'}
+          </button>
+          {isEditable && (
+            <button 
+              onClick={() => onSave(job.id, { phases: phasesForm, ...jobInfoForm })} 
+              className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-cyan-500 text-white rounded-xl hover:from-indigo-700 hover:to-cyan-600 font-bold text-sm transition-all shadow-md hover:shadow-lg"
+            >
+              Save Changes
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
