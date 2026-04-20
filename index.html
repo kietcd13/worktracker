@@ -28,12 +28,12 @@
     // =========================================================================
     const firebaseConfig = {
       // Ví dụ:
-      apiKey: "AIzaSyDyl2FoFZwKtFL6yb2sPEEWzJvBBzNK01A",
-            authDomain: "taskhub-c3f41.firebaseapp.com",
-            projectId: "taskhub-c3f41",
-            storageBucket: "taskhub-c3f41.firebasestorage.app",
-            messagingSenderId: "874827473111",
-            appId: "1:874827473111:web:cdbd7c6b8d5ece0d285092"
+      // apiKey: "AIzaSyB-xxxxxxxxxxxxxxxxxxx",
+      // authDomain: "your-project.firebaseapp.com",
+      // projectId: "your-project",
+      // storageBucket: "your-project.appspot.com",
+      // messagingSenderId: "1234567890",
+      // appId: "1:1234567890:web:abcdef123456"
     };
 
     let app, auth, db;
@@ -69,12 +69,15 @@
     const OPTIONAL_PHASES = ['Update Pre - Design', 'Update DFM - Wall Panels', 'Update DFM - Floor Cassette', 'Update DFM - Roof Panels', 'Update DFM - Lookouts'];
     const PROGRESS_STATUSES = ['Not Started', 'In Progress', 'Checking', 'On Hold', 'Completed'];
     const BUILDING_TYPES = ['Bungalow', '2-Storey', '2.5-Storey'];
-    const PRIORITIES = ['High', 'Medium', 'Low', 'Completed'];
+    const STATUSES = ['Low Priority', 'Medium Priority', 'High Priority', 'On Hold', 'Checking', 'Awaiting Further Info', 'Completed'];
 
-    const PRIORITY_STYLES = {
-      'High': 'bg-red-50 text-red-700 border-red-200',
-      'Medium': 'bg-orange-50 text-orange-700 border-orange-200',
-      'Low': 'bg-emerald-50 text-emerald-700 border-emerald-200',
+    const STATUS_STYLES = {
+      'Low Priority': 'text-emerald-600 bg-white border-slate-200',
+      'Medium Priority': 'text-orange-600 bg-white border-slate-200',
+      'High Priority': 'text-red-600 bg-white border-slate-200',
+      'On Hold': 'bg-red-600 text-white border-red-700',
+      'Checking': 'bg-orange-400 text-black border-orange-500',
+      'Awaiting Further Info': 'bg-red-600 text-white border-red-700',
       'Completed': 'bg-emerald-500 text-white border-emerald-600'
     };
 
@@ -94,6 +97,21 @@
     const INITIAL_USERS = [
       { id: 'm1', name: 'Kiet Vu', role: 'Manager' },
       { id: 's1', name: 'John Doe', role: 'Staff' },
+    ];
+
+    const INITIAL_PROJECTS = [
+      { 
+        id: 'p1', 
+        jobName: 'Alpha Tower',
+        ref: 'REF-001',
+        receivedDate: '2026-04-10',
+        startedDate: '2026-04-12',
+        ownerId: 's1', 
+        dueDate: '2026-05-20',
+        buildingType: '2-Storey',
+        status: 'High Priority',
+        phases: generateInitialPhases()
+      }
     ];
 
     // --- MAIN APP COMPONENT ---
@@ -425,7 +443,7 @@
       const [activeTab, setActiveTab] = useState('list');
       
       const [newJob, setNewJob] = useState({ 
-        jobName: '', ref: '', receivedDate: '', startedDate: '', ownerId: '', dueDate: '', buildingType: '', priority: 'Medium' 
+        jobName: '', ref: '', receivedDate: '', startedDate: '', ownerId: '', dueDate: '', buildingType: '', status: 'Medium Priority' 
       });
 
       const handleCreateJob = async (e) => {
@@ -444,7 +462,7 @@
             setProjects([...projects, project]); // Chạy local
         }
 
-        setNewJob({ jobName: '', ref: '', receivedDate: '', startedDate: '', ownerId: '', dueDate: '', buildingType: '', priority: 'Medium' });
+        setNewJob({ jobName: '', ref: '', receivedDate: '', startedDate: '', ownerId: '', dueDate: '', buildingType: '', status: 'Medium Priority' });
         setActiveTab('list');
       };
 
@@ -467,7 +485,7 @@
 
           const row = {
             'Job Name': p.jobName,
-            'Priority': p.priority || '',
+            'Status': p.status || '',
             'Ref': p.ref || '',
             'Received Date': p.receivedDate || '',
             'Started Date': p.startedDate || '',
@@ -579,9 +597,9 @@
                   </div>
 
                   <div className="flex flex-col gap-1">
-                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Priority Tag</label>
-                    <select value={newJob.priority} onChange={e => setNewJob({...newJob, priority: e.target.value})} className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors font-semibold">
-                      {PRIORITIES.map(pri => <option key={pri} value={pri}>{pri} Priority</option>)}
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Status</label>
+                    <select value={newJob.status} onChange={e => setNewJob({...newJob, status: e.target.value})} className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors font-semibold">
+                      {STATUSES.map(st => <option key={st} value={st}>{st}</option>)}
                     </select>
                   </div>
                   
@@ -639,10 +657,10 @@
               bValue = users.find(u => u.id === bValue)?.name || '';
             }
 
-            if (sortConfig.key === 'priority') {
-              const priorityWeights = { 'High': 4, 'Medium': 3, 'Low': 2, 'Completed': 1 };
-              aValue = priorityWeights[aValue] || 0;
-              bValue = priorityWeights[bValue] || 0;
+            if (sortConfig.key === 'status') {
+              const statusWeights = { 'High Priority': 7, 'Medium Priority': 6, 'Low Priority': 5, 'Checking': 4, 'Awaiting Further Info': 3, 'On Hold': 2, 'Completed': 1 };
+              aValue = statusWeights[aValue] || 0;
+              bValue = statusWeights[bValue] || 0;
             }
 
             aValue = aValue || '';
@@ -687,7 +705,7 @@
               <tr>
                 {[
                   { label: 'Job Name', key: 'jobName' },
-                  { label: 'Priority', key: 'priority' },
+                  { label: 'Status', key: 'status' },
                   { label: 'Ref', key: 'ref' },
                   { label: 'Received Date', key: 'receivedDate' },
                   { label: 'Started Date', key: 'startedDate' },
@@ -721,7 +739,7 @@
               ) : sortedProjects.map(p => {
                 const owner = users.find(u => u.id === p.ownerId)?.name || 'Unassigned';
                 const ownerColorClass = getUserColor(p.ownerId);
-                const priorityClass = PRIORITY_STYLES[p.priority] || PRIORITY_STYLES['Low'];
+                const statusClass = STATUS_STYLES[p.status] || STATUS_STYLES['Low Priority'];
 
                 return (
                   <tr 
@@ -732,9 +750,9 @@
                   >
                     <td className="px-5 py-3.5 font-bold text-indigo-700 group-hover:text-indigo-800">{p.jobName}</td>
                     <td className="px-5 py-3.5">
-                      {p.priority ? (
-                        <span className={`px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold border ${priorityClass}`}>
-                          {p.priority}
+                      {p.status ? (
+                        <span className={`px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold border ${statusClass}`}>
+                          {p.status}
                         </span>
                       ) : (
                         <span className="text-slate-400 text-xs font-semibold">-</span>
@@ -766,7 +784,7 @@
     function JobProgressModal({ job, currentUser, users, onClose, onSave, onDelete }) {
       const [phasesForm, setPhasesForm] = useState({ ...job.phases });
       const [jobInfoForm, setJobInfoForm] = useState({
-        priority: job.priority || 'Medium',
+        status: job.status || 'Medium Priority',
         ref: job.ref || '',
         ownerId: job.ownerId || '',
         startedDate: job.startedDate || ''
@@ -782,10 +800,10 @@
         if (phases.length === 0) return;
         
         const allCompleted = phases.every(p => p.progress === 'Completed');
-        if (allCompleted && jobInfoForm.priority !== 'Completed') {
-          setJobInfoForm(prev => ({ ...prev, priority: 'Completed' }));
-        } else if (!allCompleted && jobInfoForm.priority === 'Completed') {
-          setJobInfoForm(prev => ({ ...prev, priority: '' }));
+        if (allCompleted && jobInfoForm.status !== 'Completed') {
+          setJobInfoForm(prev => ({ ...prev, status: 'Completed' }));
+        } else if (!allCompleted && jobInfoForm.status === 'Completed') {
+          setJobInfoForm(prev => ({ ...prev, status: '' }));
         }
       }, [phasesForm]);
 
@@ -846,7 +864,7 @@
         onSave(job.id, { phases: phasesForm, ...jobInfoForm });
       };
       
-      const priorityClass = PRIORITY_STYLES[jobInfoForm.priority] || PRIORITY_STYLES['Low'];
+      const statusClass = STATUS_STYLES[jobInfoForm.status] || STATUS_STYLES['Low Priority'];
       const staffUsers = users.filter(u => u.role === 'Staff');
 
       const preDesignHrs = parseFloat(phasesForm['Pre-Design']?.hoursSpent || 0);
@@ -882,25 +900,25 @@
                   <h2 className="text-2xl font-extrabold text-indigo-900">{job.jobName}</h2>
                   {isEditable ? (
                     <select 
-                      value={jobInfoForm.priority}
-                      onChange={e => handleInfoChange('priority', e.target.value)}
-                      className={`px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold border outline-none cursor-pointer ${jobInfoForm.priority ? priorityClass : 'bg-slate-100 text-slate-500 border-slate-200'}`}
+                      value={jobInfoForm.status}
+                      onChange={e => handleInfoChange('status', e.target.value)}
+                      className={`px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold border outline-none cursor-pointer ${jobInfoForm.status ? statusClass : 'bg-slate-100 text-slate-500 border-slate-200'}`}
                     >
-                      <option value="" className="bg-white text-slate-800">No Priority</option>
-                      {PRIORITIES.map(pri => (
-                        <option key={pri} value={pri} className="bg-white text-slate-800">
-                          {pri} {pri !== 'Completed' && 'Priority'}
+                      <option value="" className="bg-white text-slate-800">No Status</option>
+                      {STATUSES.map(st => (
+                        <option key={st} value={st} className="bg-white text-slate-800">
+                          {st}
                         </option>
                       ))}
                     </select>
                   ) : (
-                    jobInfoForm.priority ? (
-                      <span className={`px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold border ${priorityClass}`}>
-                        {jobInfoForm.priority} {jobInfoForm.priority !== 'Completed' && 'Priority'}
+                    jobInfoForm.status ? (
+                      <span className={`px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold border ${statusClass}`}>
+                        {jobInfoForm.status}
                       </span>
                     ) : (
                       <span className="px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold border bg-slate-100 text-slate-500 border-slate-200">
-                        No Priority
+                        No Status
                       </span>
                     )
                   )}
