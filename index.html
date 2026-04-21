@@ -37,6 +37,7 @@
 
     let app, auth, db;
     try {
+      // Nếu không có config, tự hiểu là không dùng DB
       if(Object.keys(firebaseConfig).length > 0) {
           app = initializeApp(firebaseConfig);
           auth = getAuth(app);
@@ -50,7 +51,7 @@
     const FolderGit2 = ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 20H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H20a2 2 0 0 1 2 2v2"/><path d="M12 10v4h4"/><path d="m12 14 1.5-1.5"/><path d="M22 13v1"/><path d="M22 17v3a2 2 0 0 1-2 2h-9"/></svg>;
     const LogOut = ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>;
     const Plus = ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>;
-    const X = ({className, onClick}) => <svg onClick={onClick} className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>;
+    const X = ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>;
     const UserPlus = ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>;
     const FileText = ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>;
     const Trash2 = ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>;
@@ -61,22 +62,18 @@
     const ListTodo = ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="6" height="6" rx="1"/><path d="m3 17 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg>;
     const FilePlus = ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>;
     const Download = ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>;
-    const Filter = ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>;
 
     // --- CONSTANTS & MOCK DATA ---
     const PHASES = ['Pre-Design', 'DFM - Wall Panels', 'DFM - Floor Cassette', 'DFM - Roof Panels', 'DFM - Lookouts'];
     const OPTIONAL_PHASES = ['Update Pre - Design', 'Update DFM - Wall Panels', 'Update DFM - Floor Cassette', 'Update DFM - Roof Panels', 'Update DFM - Lookouts'];
     const PROGRESS_STATUSES = ['Not Started', 'In Progress', 'Checking', 'On Hold', 'Completed'];
     const BUILDING_TYPES = ['Bungalow', '2-Storey', '2.5-Storey'];
-    
-    // Thêm In Process dưới High Priority
-    const STATUSES = ['Low Priority', 'Medium Priority', 'High Priority', 'In Process', 'On Hold', 'Checking', 'Awaiting Further Info', 'Completed'];
+    const STATUSES = ['Low Priority', 'Medium Priority', 'High Priority', 'On Hold', 'Checking', 'Awaiting Further Info', 'Completed'];
 
     const STATUS_STYLES = {
       'Low Priority': 'text-emerald-600 bg-white border-slate-200',
       'Medium Priority': 'text-orange-600 bg-white border-slate-200',
       'High Priority': 'text-red-600 bg-white border-slate-200',
-      'In Process': 'bg-blue-50 text-blue-700 border-blue-200',
       'On Hold': 'bg-red-600 text-white border-red-700',
       'Checking': 'bg-orange-400 text-black border-orange-500',
       'Awaiting Further Info': 'bg-yellow-300 text-black border-yellow-400',
@@ -95,6 +92,7 @@
       return phases;
     };
 
+    // Dữ liệu mẫu ban đầu nếu chưa có Firebase
     const INITIAL_USERS = [
       { id: 'm1', name: 'Kiet Vu', role: 'Manager' },
       { id: 'm2', name: 'Huy Tang', role: 'Manager' },
@@ -111,7 +109,7 @@
         ownerId: 's1', 
         dueDate: '2026-05-20',
         buildingType: '2-Storey',
-        status: ['High Priority'],
+        status: 'High Priority',
         phases: generateInitialPhases()
       }
     ];
@@ -131,9 +129,10 @@
       const [selectedJob, setSelectedJob] = useState(null);
       const [showManageStaffModal, setShowManageStaffModal] = useState(false);
 
+      // 1. Khởi tạo Auth
       useEffect(() => {
         if (!auth) {
-            setIsDataLoaded(true); 
+            setIsDataLoaded(true); // Không có firebase -> Cho vô dùng local luôn
             return;
         }
         
@@ -142,11 +141,14 @@
         return () => unsubscribe();
       }, []);
 
+      // 2. Fetch Data
       useEffect(() => {
         if (!auth || !firebaseUser || !db) return;
 
         let isSeeding = false;
 
+        // Lưu ý: Đổi đường dẫn lưu trữ để không phụ thuộc vào `appId` môi trường ảo
+        // Thay vào đó, lưu thẳng vào collection root là 'users' và 'projects'
         const usersRef = collection(db, 'users');
         const unsubUsers = onSnapshot(usersRef, (snapshot) => {
           const loadedUsers = [];
@@ -154,6 +156,7 @@
 
           if (snapshot.empty && !isSeeding) {
             isSeeding = true;
+            // Tạo sẵn data manager nếu database trắng
             INITIAL_USERS.forEach(u => setDoc(doc(db, 'users', u.id), u));
           } else {
             setUsers(loadedUsers);
@@ -171,6 +174,7 @@
         return () => { unsubUsers(); unsubProjects(); };
       }, [firebaseUser]);
 
+      // --- FIREBASE CRUD HANDLERS ---
       const handleCreateStaff = async (e) => {
         e.preventDefault();
         if (!newStaffName.trim()) return;
@@ -179,7 +183,7 @@
         if (db) {
             await setDoc(doc(db, 'users', newUser.id), newUser);
         } else {
-            setUsers([...users, newUser]); 
+            setUsers([...users, newUser]); // Chạy local
         }
         setNewStaffName('');
       };
@@ -200,7 +204,7 @@
         if (db) {
             await deleteDoc(doc(db, 'users', userId));
         } else {
-            setUsers(users.filter(u => u.id !== userId)); 
+            setUsers(users.filter(u => u.id !== userId)); // Chạy local
         }
         if (currentUser && currentUser.id === userId) {
           setCurrentUser(null);
@@ -214,7 +218,7 @@
             const existing = projects.find(p => p.id === jobId);
             await setDoc(doc(db, 'projects', jobId), { ...existing, ...updatedData });
         } else {
-            setProjects(projects.map(p => p.id === jobId ? { ...p, ...updatedData } : p)); 
+            setProjects(projects.map(p => p.id === jobId ? { ...p, ...updatedData } : p)); // Chạy local
         }
         setSelectedJob(null);
       };
@@ -223,7 +227,7 @@
         if (db) {
             await deleteDoc(doc(db, 'projects', jobId));
         } else {
-            setProjects(projects.filter(p => p.id !== jobId)); 
+            setProjects(projects.filter(p => p.id !== jobId)); // Chạy local
         }
         setSelectedJob(null);
       };
@@ -461,7 +465,7 @@
       const [activeTab, setActiveTab] = useState('list');
       
       const [newJob, setNewJob] = useState({ 
-        jobName: '', ref: '', receivedDate: '', startedDate: '', ownerId: '', dueDate: '', buildingType: '', status: ['Medium Priority'] 
+        jobName: '', ref: '', receivedDate: '', startedDate: '', ownerId: '', dueDate: '', buildingType: '', status: 'Medium Priority' 
       });
 
       const handleCreateJob = async (e) => {
@@ -477,10 +481,10 @@
         if (db) {
             await setDoc(doc(db, 'projects', project.id), project);
         } else {
-            setProjects([...projects, project]);
+            setProjects([...projects, project]); // Chạy local
         }
 
-        setNewJob({ jobName: '', ref: '', receivedDate: '', startedDate: '', ownerId: '', dueDate: '', buildingType: '', status: ['Medium Priority'] });
+        setNewJob({ jobName: '', ref: '', receivedDate: '', startedDate: '', ownerId: '', dueDate: '', buildingType: '', status: 'Medium Priority' });
         setActiveTab('list');
       };
 
@@ -493,7 +497,6 @@
 
         const excelData = projects.map(p => {
           const owner = users.find(u => u.id === p.ownerId)?.name || 'Unassigned';
-          const statusStr = Array.isArray(p.status) ? p.status.join(', ') : (p.status || '');
 
           const preDesignHrs = parseFloat(p.phases['Pre-Design']?.hoursSpent || 0);
           const totalDfmHrs = ['DFM - Wall Panels', 'DFM - Floor Cassette', 'DFM - Roof Panels', 'DFM - Lookouts']
@@ -504,7 +507,7 @@
 
           const row = {
             'Job Name': p.jobName,
-            'Status': statusStr,
+            'Status': p.status || '',
             'Ref': p.ref || '',
             'Received Date': p.receivedDate || '',
             'Started Date': p.startedDate || '',
@@ -580,29 +583,46 @@
                   </div>
                   
                   <div className="flex flex-col gap-1">
-                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Status (Max 3)</label>
-                    <div className="flex flex-wrap gap-1 mb-1">
-                      {newJob.status.map(st => (
-                        <span key={st} className={`px-2 py-1 flex items-center gap-1 rounded-md text-[10px] uppercase font-bold border ${STATUS_STYLES[st] || STATUS_STYLES['Low Priority']}`}>
-                          {st} <X className="w-3 h-3 cursor-pointer hover:text-red-500" onClick={() => setNewJob({...newJob, status: newJob.status.filter(s => s !== st)})} />
-                        </span>
-                      ))}
-                    </div>
-                    {newJob.status.length < 3 && (
-                      <select 
-                        onChange={e => {
-                          const val = e.target.value;
-                          if(val && !newJob.status.includes(val)) {
-                            setNewJob({...newJob, status: [...newJob.status, val]});
-                          }
-                          e.target.value = '';
-                        }} 
-                        className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors font-semibold"
-                      >
-                        <option value="">+ Add Status...</option>
-                        {STATUSES.filter(s => !newJob.status.includes(s)).map(st => <option key={st} value={st}>{st}</option>)}
-                      </select>
-                    )}
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Ref</label>
+                    <input type="text" value={newJob.ref} onChange={e => setNewJob({...newJob, ref: e.target.value})} className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors" />
+                  </div>
+
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Received Date *</label>
+                    <input type="date" required value={newJob.receivedDate} onChange={e => setNewJob({...newJob, receivedDate: e.target.value})} className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors" />
+                  </div>
+
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Started Date</label>
+                    <input type="date" value={newJob.startedDate} onChange={e => setNewJob({...newJob, startedDate: e.target.value})} className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors" />
+                  </div>
+
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Due Date *</label>
+                    <input type="date" required value={newJob.dueDate} onChange={e => setNewJob({...newJob, dueDate: e.target.value})} className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors" />
+                  </div>
+
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Owner</label>
+                    <select value={newJob.ownerId} onChange={e => setNewJob({...newJob, ownerId: e.target.value})} className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors">
+                      <option value="">Select Owner...</option>
+                      {staffUsers.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+                    </select>
+                  </div>
+
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Building Type *</label>
+                    <select required value={newJob.buildingType} onChange={e => setNewJob({...newJob, buildingType: e.target.value})} className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors">
+                      <option value="">Select Type...</option>
+                      {BUILDING_TYPES.map(type => <option key={type} value={type}>{type}</option>)}
+                    </select>
+                  </div>
+
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Status</label>
+                    <select value={newJob.status} onChange={e => setNewJob({...newJob, status: e.target.value})} className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors font-semibold">
+                      {STATUSES.map(st => <option key={st} value={st}>{st}</option>)}
+                    </select>
                   </div>
                   
                   <div className="lg:col-span-3 flex justify-end mt-4 pt-4 border-t border-slate-100">
@@ -645,25 +665,12 @@
     }
 
     function JobsTable({ projects, users, onJobClick }) {
-      // 1. Mặc định sort theo receivedDate asc (Bài nhận trước ở trên)
-      const [sortConfig, setSortConfig] = useState({ key: 'receivedDate', direction: 'asc' });
-      
-      // State cho bộ lọc
-      const [filters, setFilters] = useState({ status: '', ownerId: '', buildingType: '' });
+      const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
-      const filteredAndSortedProjects = useMemo(() => {
-        // Lọc dữ liệu trước
-        let result = projects.filter(p => {
-           const pStatus = Array.isArray(p.status) ? p.status : (p.status ? [p.status] : []);
-           if (filters.status && !pStatus.includes(filters.status)) return false;
-           if (filters.ownerId && p.ownerId !== filters.ownerId) return false;
-           if (filters.buildingType && p.buildingType !== filters.buildingType) return false;
-           return true;
-        });
-
-        // Sắp xếp
+      const sortedProjects = useMemo(() => {
+        let sortableItems = [...projects];
         if (sortConfig.key !== null) {
-          result.sort((a, b) => {
+          sortableItems.sort((a, b) => {
             let aValue = a[sortConfig.key];
             let bValue = b[sortConfig.key];
 
@@ -673,14 +680,9 @@
             }
 
             if (sortConfig.key === 'status') {
-              const statusWeights = { 'High Priority': 8, 'In Process': 7, 'Medium Priority': 6, 'Low Priority': 5, 'Checking': 4, 'Awaiting Further Info': 3, 'On Hold': 2, 'Completed': 1 };
-              
-              // Sort theo status đầu tiên nếu có nhiều status
-              let aStat = Array.isArray(aValue) ? aValue[0] : aValue;
-              let bStat = Array.isArray(bValue) ? bValue[0] : bValue;
-
-              aValue = statusWeights[aStat] || 0;
-              bValue = statusWeights[bStat] || 0;
+              const statusWeights = { 'High Priority': 7, 'Medium Priority': 6, 'Low Priority': 5, 'Checking': 4, 'Awaiting Further Info': 3, 'On Hold': 2, 'Completed': 1 };
+              aValue = statusWeights[aValue] || 0;
+              bValue = statusWeights[bValue] || 0;
             }
 
             aValue = aValue || '';
@@ -691,8 +693,8 @@
             return 0;
           });
         }
-        return result;
-      }, [projects, sortConfig, filters, users]);
+        return sortableItems;
+      }, [projects, sortConfig, users]);
 
       const requestSort = (key) => {
         let direction = 'asc';
@@ -719,129 +721,92 @@
       };
 
       return (
-        <div>
-          {/* Thanh Filter */}
-          <div className="flex flex-wrap gap-4 mb-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm items-center">
-            <div className="flex items-center gap-2 text-slate-600 font-bold">
-               <Filter className="w-4 h-4" />
-               <span className="text-sm">Filter data:</span>
-            </div>
-            
-            <select value={filters.status} onChange={e => setFilters({...filters, status: e.target.value})} className="text-sm border border-slate-200 bg-slate-50 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
-               <option value="">All Statuses</option>
-               {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
-            </select>
-
-            <select value={filters.ownerId} onChange={e => setFilters({...filters, ownerId: e.target.value})} className="text-sm border border-slate-200 bg-slate-50 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
-               <option value="">All Owners</option>
-               {staffUsers.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
-            </select>
-
-            <select value={filters.buildingType} onChange={e => setFilters({...filters, buildingType: e.target.value})} className="text-sm border border-slate-200 bg-slate-50 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
-               <option value="">All Building Types</option>
-               {BUILDING_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
-            </select>
-            
-            {/* Nút xóa filter nếu có chọn filter */}
-            {(filters.status || filters.ownerId || filters.buildingType) && (
-              <button onClick={() => setFilters({status: '', ownerId: '', buildingType: ''})} className="text-xs text-rose-500 font-bold hover:underline">
-                Clear filters
-              </button>
-            )}
-          </div>
-
-          <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
-            <table className="w-full text-sm text-left whitespace-nowrap">
-              <thead className="text-[11px] text-slate-500 uppercase tracking-wider bg-slate-50/80 border-b border-slate-200 font-bold">
+        <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+          <table className="w-full text-sm text-left whitespace-nowrap">
+            <thead className="text-[11px] text-slate-500 uppercase tracking-wider bg-slate-50/80 border-b border-slate-200 font-bold">
+              <tr>
+                {[
+                  { label: 'Job Name', key: 'jobName' },
+                  { label: 'Status', key: 'status' },
+                  { label: 'Ref', key: 'ref' },
+                  { label: 'Received Date', key: 'receivedDate' },
+                  { label: 'Started Date', key: 'startedDate' },
+                  { label: 'Owner', key: 'ownerId' },
+                  { label: 'Due Date', key: 'dueDate' },
+                  { label: 'Building Type', key: 'buildingType' },
+                ].map(col => (
+                  <th 
+                    key={col.key}
+                    onClick={() => requestSort(col.key)}
+                    className="px-5 py-4 cursor-pointer hover:bg-slate-100 transition-colors group"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      {col.label}
+                      {getSortIcon(col.key)}
+                    </div>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {sortedProjects.length === 0 ? (
                 <tr>
-                  {[
-                    { label: 'Job Name', key: 'jobName' },
-                    { label: 'Status', key: 'status' },
-                    { label: 'Ref', key: 'ref' },
-                    { label: 'Received Date', key: 'receivedDate' },
-                    { label: 'Started Date', key: 'startedDate' },
-                    { label: 'Owner', key: 'ownerId' },
-                    { label: 'Due Date', key: 'dueDate' },
-                    { label: 'Building Type', key: 'buildingType' },
-                  ].map(col => (
-                    <th 
-                      key={col.key}
-                      onClick={() => requestSort(col.key)}
-                      className="px-5 py-4 cursor-pointer hover:bg-slate-100 transition-colors group"
-                    >
-                      <div className="flex items-center gap-1.5">
-                        {col.label}
-                        {getSortIcon(col.key)}
-                      </div>
-                    </th>
-                  ))}
+                  <td colSpan="8" className="px-5 py-12 text-center text-slate-400 bg-white">
+                    <div className="flex flex-col items-center justify-center">
+                      <FileText className="w-10 h-10 text-slate-200 mb-2" />
+                      <p>No jobs found.</p>
+                    </div>
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {filteredAndSortedProjects.length === 0 ? (
-                  <tr>
-                    <td colSpan="8" className="px-5 py-12 text-center text-slate-400 bg-white">
-                      <div className="flex flex-col items-center justify-center">
-                        <FileText className="w-10 h-10 text-slate-200 mb-2" />
-                        <p>No jobs found.</p>
-                      </div>
+              ) : sortedProjects.map(p => {
+                const owner = users.find(u => u.id === p.ownerId)?.name || 'Unassigned';
+                const ownerColorClass = getUserColor(p.ownerId);
+                const statusClass = STATUS_STYLES[p.status] || STATUS_STYLES['Low Priority'];
+
+                return (
+                  <tr 
+                    key={p.id} 
+                    onClick={() => onJobClick(p)}
+                    className="hover:bg-indigo-50/50 cursor-pointer transition-colors bg-white group"
+                    title="Click to view/edit phases"
+                  >
+                    <td className="px-5 py-3.5 font-bold text-indigo-700 group-hover:text-indigo-800">{p.jobName}</td>
+                    <td className="px-5 py-3.5">
+                      {p.status ? (
+                        <span className={`px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold border ${statusClass}`}>
+                          {p.status}
+                        </span>
+                      ) : (
+                        <span className="text-slate-400 text-xs font-semibold">-</span>
+                      )}
+                    </td>
+                    <td className="px-5 py-3.5 text-slate-600 font-mono text-xs">{p.ref || '-'}</td>
+                    <td className="px-5 py-3.5 text-slate-600">{p.receivedDate || '-'}</td>
+                    <td className="px-5 py-3.5 text-slate-600">{p.startedDate || '-'}</td>
+                    <td className={`px-5 py-3.5 font-extrabold ${ownerColorClass}`}>
+                      <span className="bg-slate-50 px-2.5 py-1 rounded-md border border-slate-100 shadow-sm">{owner}</span>
+                    </td>
+                    <td className="px-5 py-3.5 text-slate-600 font-medium">{p.dueDate || '-'}</td>
+                    <td className="px-5 py-3.5">
+                      {p.buildingType ? (
+                        <span className="px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                          {p.buildingType}
+                        </span>
+                      ) : '-'}
                     </td>
                   </tr>
-                ) : filteredAndSortedProjects.map(p => {
-                  const owner = users.find(u => u.id === p.ownerId)?.name || 'Unassigned';
-                  const ownerColorClass = getUserColor(p.ownerId);
-                  
-                  // Handle Array Status
-                  const statusArray = Array.isArray(p.status) ? p.status : (p.status ? [p.status] : []);
-
-                  return (
-                    <tr 
-                      key={p.id} 
-                      onClick={() => onJobClick(p)}
-                      className="hover:bg-indigo-50/50 cursor-pointer transition-colors bg-white group"
-                      title="Click to view/edit phases"
-                    >
-                      <td className="px-5 py-3.5 font-bold text-indigo-700 group-hover:text-indigo-800">{p.jobName}</td>
-                      <td className="px-5 py-3.5">
-                        <div className="flex flex-wrap gap-1">
-                          {statusArray.length > 0 ? statusArray.map(st => (
-                            <span key={st} className={`px-2 py-0.5 rounded-md text-[10px] uppercase tracking-wider font-bold border ${STATUS_STYLES[st] || STATUS_STYLES['Low Priority']}`}>
-                              {st}
-                            </span>
-                          )) : <span className="text-slate-400 text-xs font-semibold">-</span>}
-                        </div>
-                      </td>
-                      <td className="px-5 py-3.5 text-slate-600 font-mono text-xs">{p.ref || '-'}</td>
-                      <td className="px-5 py-3.5 text-slate-600">{p.receivedDate || '-'}</td>
-                      <td className="px-5 py-3.5 text-slate-600">{p.startedDate || '-'}</td>
-                      <td className={`px-5 py-3.5 font-extrabold ${ownerColorClass}`}>
-                        <span className="bg-slate-50 px-2.5 py-1 rounded-md border border-slate-100 shadow-sm">{owner}</span>
-                      </td>
-                      <td className="px-5 py-3.5 text-slate-600 font-medium">{p.dueDate || '-'}</td>
-                      <td className="px-5 py-3.5">
-                        {p.buildingType ? (
-                          <span className="px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
-                            {p.buildingType}
-                          </span>
-                        ) : '-'}
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
+                )
+              })}
+            </tbody>
+          </table>
         </div>
       );
     }
 
     function JobProgressModal({ job, currentUser, users, onClose, onSave, onDelete }) {
       const [phasesForm, setPhasesForm] = useState({ ...job.phases });
-      
-      const initialStatus = Array.isArray(job.status) ? job.status : (job.status ? [job.status] : []);
-      
       const [jobInfoForm, setJobInfoForm] = useState({
-        status: initialStatus,
+        status: job.status || 'Medium Priority',
         ref: job.ref || '',
         ownerId: job.ownerId || '',
         startedDate: job.startedDate || ''
@@ -857,14 +822,10 @@
         if (phases.length === 0) return;
         
         const allCompleted = phases.every(p => p.progress === 'Completed');
-        const hasCompletedStatus = jobInfoForm.status.includes('Completed');
-
-        if (allCompleted && !hasCompletedStatus) {
-          // Ghi đè thành Completed nếu xong hết
-          setJobInfoForm(prev => ({ ...prev, status: ['Completed'] }));
-        } else if (!allCompleted && hasCompletedStatus) {
-          // Bỏ Completed nếu lỡ có phase chưa xong
-          setJobInfoForm(prev => ({ ...prev, status: prev.status.filter(s => s !== 'Completed') }));
+        if (allCompleted && jobInfoForm.status !== 'Completed') {
+          setJobInfoForm(prev => ({ ...prev, status: 'Completed' }));
+        } else if (!allCompleted && jobInfoForm.status === 'Completed') {
+          setJobInfoForm(prev => ({ ...prev, status: '' }));
         }
       }, [phasesForm]);
 
@@ -917,7 +878,7 @@
       const handleSave = () => {
         for (const [phaseName, data] of Object.entries(phasesForm)) {
           if (data.progress === 'Completed' && !data.dateSent) {
-            setErrorMsg(`Please enter Date Sent for phase "${phaseName}" when marked as Completed.`);
+            setErrorMsg(`Vui lòng nhập Date Sent cho phase "${phaseName}" khi đã chọn Completed.`);
             return;
           }
         }
@@ -925,6 +886,7 @@
         onSave(job.id, { phases: phasesForm, ...jobInfoForm });
       };
       
+      const statusClass = STATUS_STYLES[jobInfoForm.status] || STATUS_STYLES['Low Priority'];
       const staffUsers = users.filter(u => u.role === 'Staff');
 
       const preDesignHrs = parseFloat(phasesForm['Pre-Design']?.hoursSpent || 0);
@@ -934,6 +896,7 @@
         .filter(phase => !PHASES.includes(phase))
         .reduce((sum, phase) => sum + parseFloat(phasesForm[phase]?.hoursSpent || 0), 0);
 
+      // Cố định thứ tự hiển thị của các Phase
       const orderedPhaseNames = useMemo(() => {
         const keys = Object.keys(phasesForm);
         const basePhases = PHASES.filter(p => keys.includes(p));
@@ -963,36 +926,35 @@
 
             <div className="px-6 py-5 border-b flex justify-between items-start bg-gradient-to-r from-indigo-50 to-white">
               <div className="flex-1 pr-4">
-                <div className="flex items-center gap-3 mb-2">
+                <div className="flex items-center gap-3">
                   <h2 className="text-2xl font-extrabold text-indigo-900">{job.jobName}</h2>
-                </div>
-                
-                <div className="flex items-center gap-2 mb-4">
-                  {jobInfoForm.status.map(st => (
-                    <span key={st} className={`px-2 py-1 flex items-center gap-1 rounded-md text-[10px] uppercase tracking-wider font-bold border ${STATUS_STYLES[st] || STATUS_STYLES['Low Priority']}`}>
-                      {st} {isEditable && <X className="w-3 h-3 cursor-pointer hover:opacity-50" onClick={() => setJobInfoForm({...jobInfoForm, status: jobInfoForm.status.filter(s => s !== st)})} />}
-                    </span>
-                  ))}
-                  
-                  {isEditable && jobInfoForm.status.length < 3 && (
-                     <select 
-                        onChange={e => {
-                          if(e.target.value && !jobInfoForm.status.includes(e.target.value)) {
-                            setJobInfoForm({...jobInfoForm, status: [...jobInfoForm.status, e.target.value]});
-                          }
-                          e.target.value = '';
-                        }}
-                        className="px-2 py-1 text-[10px] uppercase font-bold border border-slate-200 rounded-md outline-none cursor-pointer bg-white text-slate-500 hover:bg-slate-50"
-                      >
-                        <option value="">+ Add Status</option>
-                        {STATUSES.filter(s => !jobInfoForm.status.includes(s)).map(st => (
-                          <option key={st} value={st}>{st}</option>
-                        ))}
-                      </select>
+                  {isEditable ? (
+                    <select 
+                      value={jobInfoForm.status}
+                      onChange={e => handleInfoChange('status', e.target.value)}
+                      className={`px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold border outline-none cursor-pointer ${jobInfoForm.status ? statusClass : 'bg-slate-100 text-slate-500 border-slate-200'}`}
+                    >
+                      <option value="" className="bg-white text-slate-800">No Status</option>
+                      {STATUSES.map(st => (
+                        <option key={st} value={st} className="bg-white text-slate-800">
+                          {st}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    jobInfoForm.status ? (
+                      <span className={`px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold border ${statusClass}`}>
+                        {jobInfoForm.status}
+                      </span>
+                    ) : (
+                      <span className="px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold border bg-slate-100 text-slate-500 border-slate-200">
+                        No Status
+                      </span>
+                    )
                   )}
                 </div>
-
-                <div className="flex flex-wrap gap-4 bg-white/50 p-3 rounded-xl border border-indigo-100/50">
+                
+                <div className="flex flex-wrap gap-4 mt-4 bg-white/50 p-3 rounded-xl border border-indigo-100/50">
                   <div className="flex flex-col gap-1">
                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Ref</span>
                     {isEditable ? (
@@ -1056,7 +1018,7 @@
                             <div className="flex items-center justify-between">
                               <span>{phaseName}</span>
                               {!isBasePhase && isEditable && (
-                                <button onClick={() => handleRemovePhase(phaseName)} className="text-red-400 hover:text-red-600 p-1" title="Remove this phase">
+                                <button onClick={() => handleRemovePhase(phaseName)} className="text-red-400 hover:text-red-600 p-1" title="Xóa phase này">
                                   <X className="w-4 h-4" />
                                 </button>
                               )}
