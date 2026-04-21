@@ -686,9 +686,20 @@
 
     function JobsTable({ projects, users, onJobClick }) {
       const [sortConfig, setSortConfig] = useState({ key: 'receivedDate', direction: 'asc' });
+      const [filters, setFilters] = useState({ status: '', ownerId: '', buildingType: '' });
 
       const sortedProjects = useMemo(() => {
-        let sortableItems = [...projects];
+        let filteredItems = projects.filter(p => {
+          if (filters.status) {
+            const arr = Array.isArray(p.status) ? p.status : (p.status ? [p.status] : []);
+            if (!arr.includes(filters.status)) return false;
+          }
+          if (filters.ownerId && p.ownerId !== filters.ownerId) return false;
+          if (filters.buildingType && p.buildingType !== filters.buildingType) return false;
+          return true;
+        });
+
+        let sortableItems = [...filteredItems];
         if (sortConfig.key !== null) {
           sortableItems.sort((a, b) => {
             let aValue = a[sortConfig.key];
@@ -719,7 +730,7 @@
           });
         }
         return sortableItems;
-      }, [projects, sortConfig, users]);
+      }, [projects, sortConfig, filters, users]);
 
       const requestSort = (key) => {
         let direction = 'asc';
@@ -752,23 +763,39 @@
               <tr>
                 {[
                   { label: 'Job Name', key: 'jobName' },
-                  { label: 'Status', key: 'status' },
+                  { label: 'Status', key: 'status', filterable: true, options: STATUSES.map(s => ({ value: s, label: s })) },
                   { label: 'Ref', key: 'ref' },
                   { label: 'Received Date', key: 'receivedDate' },
                   { label: 'Started Date', key: 'startedDate' },
-                  { label: 'Owner', key: 'ownerId' },
+                  { label: 'Owner', key: 'ownerId', filterable: true, options: staffUsers.map(u => ({ value: u.id, label: u.name })) },
                   { label: 'Due Date', key: 'dueDate' },
-                  { label: 'Building Type', key: 'buildingType' },
+                  { label: 'Building Type', key: 'buildingType', filterable: true, options: BUILDING_TYPES.map(t => ({ value: t, label: t })) },
                 ].map(col => (
                   <th 
                     key={col.key}
-                    onClick={() => requestSort(col.key)}
-                    className="px-5 py-4 cursor-pointer hover:bg-slate-100 transition-colors group"
+                    className="px-5 py-3 align-top group"
                   >
-                    <div className="flex items-center gap-1.5">
+                    <div 
+                      className="flex items-center gap-1.5 cursor-pointer hover:text-indigo-600 transition-colors"
+                      onClick={() => requestSort(col.key)}
+                    >
                       {col.label}
                       {getSortIcon(col.key)}
                     </div>
+                    {col.filterable && (
+                      <div className="mt-2 font-medium" onClick={e => e.stopPropagation()}>
+                        <select
+                          value={filters[col.key]}
+                          onChange={(e) => setFilters(prev => ({ ...prev, [col.key]: e.target.value }))}
+                          className="w-full min-w-[100px] px-2 py-1.5 border border-slate-200 rounded-lg text-[10px] text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+                        >
+                          <option value="">All</option>
+                          {col.options.map(opt => (
+                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
                   </th>
                 ))}
               </tr>
