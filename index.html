@@ -895,6 +895,7 @@
     function JobProgressModal({ job, currentUser, users, onClose, onSave, onDelete }) {
       const [phasesForm, setPhasesForm] = useState({ ...job.phases });
       const [jobInfoForm, setJobInfoForm] = useState({
+        jobName: job.jobName || '',
         status: Array.isArray(job.status) ? job.status : (job.status ? [job.status] : []),
         ref: job.ref || '',
         ownerId: job.ownerId || '',
@@ -1033,7 +1034,17 @@
             <div className="px-6 py-5 border-b flex justify-between items-start bg-gradient-to-r from-indigo-50 to-white">
               <div className="flex-1 pr-4">
                 <div className="flex items-center gap-3">
-                  <h2 className="text-2xl font-extrabold text-indigo-900">{job.jobName}</h2>
+                  {isEditable ? (
+                    <input 
+                      type="text" 
+                      value={jobInfoForm.jobName} 
+                      onChange={e => handleInfoChange('jobName', e.target.value)} 
+                      className="text-2xl font-extrabold text-indigo-900 bg-transparent border border-transparent hover:border-slate-300 focus:border-indigo-500 focus:bg-white rounded-lg px-2 py-0.5 outline-none transition-all w-full max-w-[300px]"
+                      placeholder="Enter Job Name..."
+                    />
+                  ) : (
+                    <h2 className="text-2xl font-extrabold text-indigo-900 px-2 py-0.5">{jobInfoForm.jobName}</h2>
+                  )}
                   <div className="relative flex items-center gap-2">
                     <div className="flex flex-wrap gap-1">
                         {currentStatuses.length === 0 && (
