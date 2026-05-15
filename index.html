@@ -195,11 +195,8 @@
     const OPTIONAL_PHASES = ['Update Pre - Design', 'Update DFM - Wall Panels', 'Update DFM - Floor Cassette', 'Update DFM - Roof Panels', 'Update DFM - Lookouts'];
 
     const PROGRESS_STATUSES = ['Not Started', 'In Progress', 'Checking', 'On Hold', 'Completed'];
-
-    const BUILDING_TYPES = ['Bungalow', '2 Storey', '2.5 Storey'];
-
+    const BUILDING_TYPES = ['Bungalow', '2-Storey', '2.5-Storey'];
     
-
     const PRIORITIES = ['High', 'Medium', 'Low', 'None'];
 
     const STATUSES = ['In Process', 'On Hold', 'Checking', 'Awaiting Further Info', 'Completed'];
@@ -303,78 +300,41 @@
     // Dữ liệu mẫu ban đầu
 
     const INITIAL_USERS = [
-
       { id: 'm1', name: 'Kiet Vu', role: 'Manager' },
-
       { id: 'm2', name: 'Huy Tang', role: 'Manager' },
-
       { id: 'u1', name: 'Duy Nguyen', role: 'Staff' },
-
       { id: 'u2', name: 'Thuan Doan', role: 'Staff' },
-
       { id: 'u3', name: 'Kiet Bui', role: 'Staff' },
-
       { id: 'u4', name: 'Thuan Nguyen', role: 'Staff' },
-
       { id: 'u5', name: 'Bach Le', role: 'Staff' },
-
       { id: 'c1', name: 'Alan Hennis', role: 'Customer' },
-
     ];
-
-
 
     const INITIAL_PROJECTS = [
-
-      { id: 'p1', jobName: 'Fletcher (Mid)', ref: 'FL-T', receivedDate: '2025-12-02', startedDate: '2025-12-05', ownerId: 'u1', dueDate: '2026-01-09', buildingType: '2.5 Storey', priority: 'High', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 3, dateSent: '2026-01-14' }, 'DFM - Wall Panels': { progress: 'Completed', hoursSpent: 12, dateSent: '2026-01-14' }, 'DFM - Floor Cassette': { progress: 'Completed', hoursSpent: 5, dateSent: '2026-01-14' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 5, dateSent: '2026-01-14' }, 'Update DFM - Wall Panels (2)': { progress: 'Completed', hoursSpent: 47.5, dateSent: '2026-02-13' }, 'Update DFM - Wall Panels (3)': { progress: 'In Progress', hoursSpent: 31, dateSent: '' } } },
-
-      { id: 'p2', jobName: 'Fuller', ref: 'FR-D', receivedDate: '2025-12-02', startedDate: '2025-12-17', ownerId: 'u2', dueDate: '2026-01-16', buildingType: '2 Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 8.5, dateSent: '2026-01-07' }, 'DFM - Wall Panels': { progress: 'Completed', hoursSpent: 23, dateSent: '2026-01-07' }, 'DFM - Floor Cassette': { progress: 'Completed', hoursSpent: 7.5, dateSent: '2026-01-07' }, 'DFM - Roof Panels': { progress: 'Completed', hoursSpent: 4, dateSent: '2026-02-13' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 10.5, dateSent: '2026-02-13' }, 'Update DFM - Wall Panels (2)': { progress: 'Completed', hoursSpent: 21.5, dateSent: '2026-03-27' } } },
-
-      { id: 'p3', jobName: 'Lacemaker', ref: 'LA-S', receivedDate: '2025-12-02', startedDate: '2025-12-18', ownerId: 'u3', dueDate: '2026-01-16', buildingType: '2.5 Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 10, dateSent: '2026-01-14' }, 'DFM - Wall Panels': { progress: 'Completed', hoursSpent: 41, dateSent: '2026-01-14' }, 'DFM - Floor Cassette': { progress: 'Completed', hoursSpent: 28.5, dateSent: '2026-01-14' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'In Progress', hoursSpent: 5, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 1, dateSent: '2026-01-16' }, 'Update DFM - Wall Panels (2)': { progress: 'Completed', hoursSpent: 33, dateSent: '2026-02-13' }, 'Update DFM - Wall Panels (3)': { progress: 'Completed', hoursSpent: 51, dateSent: '2026-03-24' } } },
-
-      { id: 'p4', jobName: 'Manciple-Life (End)', ref: 'MP-S', receivedDate: '2025-12-02', startedDate: '2025-12-17', ownerId: 'u4', dueDate: '2026-01-16', buildingType: '2 Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 8.5, dateSent: '2026-01-07' }, 'DFM - Wall Panels': { progress: 'Completed', hoursSpent: 16.5, dateSent: '2026-01-07' }, 'DFM - Floor Cassette': { progress: 'Completed', hoursSpent: 12, dateSent: '2026-01-07' }, 'DFM - Roof Panels': { progress: 'Completed', hoursSpent: 4, dateSent: '2026-02-12' }, 'DFM - Lookouts': { progress: 'In Progress', hoursSpent: 8, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 17, dateSent: '2026-02-12' }, 'Update DFM - Wall Panels (2)': { progress: 'Completed', hoursSpent: 19.5, dateSent: '2026-03-24' } } },
-
-      { id: 'p5', jobName: 'Manciple-Life (Mid)', ref: 'MP-T', receivedDate: '2025-12-02', startedDate: '2025-12-17', ownerId: 'u4', dueDate: '2026-01-16', buildingType: '2 Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 3.5, dateSent: '2026-01-09' }, 'DFM - Wall Panels': { progress: 'Completed', hoursSpent: 12.5, dateSent: '2026-01-09' }, 'DFM - Floor Cassette': { progress: 'Completed', hoursSpent: 4, dateSent: '2026-01-09' }, 'DFM - Roof Panels': { progress: 'Completed', hoursSpent: 1, dateSent: '2026-02-12' }, 'DFM - Lookouts': { progress: 'In Progress', hoursSpent: 5.5, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 8, dateSent: '2026-02-12' }, 'Update DFM - Wall Panels (2)': { progress: 'Completed', hoursSpent: 22, dateSent: '2026-03-24' } } },
-
-      { id: 'p6', jobName: 'Milliner', ref: 'MI-D', receivedDate: '2025-12-02', startedDate: '2025-12-17', ownerId: 'u5', dueDate: '2026-01-23', buildingType: '2 Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 11.5, dateSent: '2026-01-09' }, 'DFM - Wall Panels': { progress: 'Completed', hoursSpent: 27.5, dateSent: '2026-01-09' }, 'DFM - Floor Cassette': { progress: 'Completed', hoursSpent: 19, dateSent: '2026-01-09' }, 'DFM - Roof Panels': { progress: 'Completed', hoursSpent: 8.5, dateSent: '2026-02-13' }, 'DFM - Lookouts': { progress: 'In Progress', hoursSpent: 4, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 23, dateSent: '2026-02-24' }, 'Update DFM - Wall Panels (2)': { progress: 'Completed', hoursSpent: 35, dateSent: '2026-03-24' }, 'Update DFM - Wall Panels (3)': { progress: 'Completed', hoursSpent: 10.5, dateSent: '2026-03-30' } } },
-
-      { id: 'p7', jobName: 'Milliner-Life', ref: 'SR-D', receivedDate: '2025-12-02', startedDate: '2025-09-01', ownerId: 'u5', dueDate: '2026-01-23', buildingType: '2 Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'In Progress', hoursSpent: 2, dateSent: '' }, 'DFM - Wall Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' } } },
-
-      { id: 'p8', jobName: 'Quilter', ref: 'QU-D', receivedDate: '2025-12-02', startedDate: '2026-01-06', ownerId: 'u2', dueDate: '2026-01-23', buildingType: '2 Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 6, dateSent: '2026-01-15' }, 'DFM - Wall Panels': { progress: 'Completed', hoursSpent: 12, dateSent: '2026-01-15' }, 'DFM - Floor Cassette': { progress: 'Completed', hoursSpent: 10, dateSent: '2026-01-15' }, 'DFM - Roof Panels': { progress: 'Completed', hoursSpent: 3, dateSent: '2026-02-13' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 7.5, dateSent: '2026-02-13' }, 'Update DFM - Wall Panels (2)': { progress: 'Completed', hoursSpent: 19, dateSent: '2026-03-27' } } },
-
-      { id: 'p9', jobName: 'Reedmaker-Life', ref: 'RE-D', receivedDate: '2025-12-02', startedDate: '2026-01-12', ownerId: 'u5', dueDate: '2026-01-23', buildingType: '2 Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 6.5, dateSent: '2026-01-21' }, 'DFM - Wall Panels': { progress: 'Completed', hoursSpent: 20, dateSent: '2026-01-21' }, 'DFM - Floor Cassette': { progress: 'Completed', hoursSpent: 14, dateSent: '2026-01-21' }, 'DFM - Roof Panels': { progress: 'Completed', hoursSpent: 6, dateSent: '2026-02-13' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 15.5, dateSent: '2026-02-13' }, 'Update DFM - Wall Panels (2)': { progress: 'Completed', hoursSpent: 34, dateSent: '2026-03-31' } } },
-
-      { id: 'p10', jobName: 'Silversmith', ref: 'SI-D', receivedDate: '2025-12-02', startedDate: '2026-01-08', ownerId: 'u4', dueDate: '2026-01-30', buildingType: '2 Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 9, dateSent: '2026-01-21' }, 'DFM - Wall Panels': { progress: 'Completed', hoursSpent: 16, dateSent: '2026-01-21' }, 'DFM - Floor Cassette': { progress: 'Completed', hoursSpent: 16, dateSent: '2026-01-21' }, 'DFM - Roof Panels': { progress: 'Completed', hoursSpent: 3, dateSent: '2026-02-12' }, 'DFM - Lookouts': { progress: 'In Progress', hoursSpent: 8.5, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 15, dateSent: '2026-02-12' }, 'Update DFM - Wall Panels (2)': { progress: 'Completed', hoursSpent: 23.5, dateSent: '2026-03-25' } } },
-
-      { id: 'p11', jobName: 'Slater', ref: 'SL-S', receivedDate: '2025-12-02', startedDate: '2026-01-12', ownerId: 'u3', dueDate: '2026-01-30', buildingType: '2 Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 4.5, dateSent: '2026-01-21' }, 'DFM - Wall Panels': { progress: 'Completed', hoursSpent: 11.5, dateSent: '2026-01-21' }, 'DFM - Floor Cassette': { progress: 'Completed', hoursSpent: 8, dateSent: '2026-01-21' }, 'DFM - Roof Panels': { progress: 'Completed', hoursSpent: 3.5, dateSent: '2026-02-13' }, 'DFM - Lookouts': { progress: 'In Progress', hoursSpent: 3, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 21, dateSent: '2026-02-13' }, 'Update DFM - Wall Panels (2)': { progress: 'Completed', hoursSpent: 42, dateSent: '2026-03-25' }, 'Update DFM - Wall Panels (3)': { progress: 'Completed', hoursSpent: 11, dateSent: '2026-03-30' } } },
-
-      { id: 'p12', jobName: 'Poet', ref: 'PT-L', receivedDate: '2026-03-16', startedDate: '2026-03-23', ownerId: 'u1', dueDate: '2026-04-07', buildingType: '2 Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 11, dateSent: '2026-03-24' }, 'DFM - Wall Panels': { progress: 'In Progress', hoursSpent: 21, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'In Progress', hoursSpent: 12.5, dateSent: '' }, 'DFM - Roof Panels': { progress: 'In Progress', hoursSpent: 8.5, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'In Progress', hoursSpent: 14.5, dateSent: '' } } },
-
-      { id: 'p13', jobName: 'Sailmaker', ref: 'SA-L', receivedDate: '2026-03-16', startedDate: '2026-03-23', ownerId: 'u1', dueDate: '2026-04-09', buildingType: '2.5 Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 9, dateSent: '2026-03-26' }, 'DFM - Wall Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' } } },
-
-      { id: 'p14', jobName: 'Sailmaker - Support', ref: 'SA-L', receivedDate: '2026-03-16', startedDate: '2026-03-30', ownerId: 'u3', dueDate: '2026-04-09', buildingType: '2.5 Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Wall Panels': { progress: 'In Progress', hoursSpent: 26, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'In Progress', hoursSpent: 19.5, dateSent: '' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'In Progress', hoursSpent: 4.5, dateSent: '' } } },
-
-      { id: 'p15', jobName: 'Wainwright', ref: 'WW', receivedDate: '2026-03-16', startedDate: '2026-03-26', ownerId: 'u1', dueDate: '2026-04-16', buildingType: '2.5 Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 6.5, dateSent: '2026-03-27' }, 'DFM - Wall Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' } } },
-
-      { id: 'p16', jobName: 'Wainwright - Support', ref: 'WW', receivedDate: '2026-03-16', startedDate: '2026-03-31', ownerId: 'u4', dueDate: '2026-04-16', buildingType: '2.5 Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Wall Panels': { progress: 'In Progress', hoursSpent: 16.5, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'In Progress', hoursSpent: 14.5, dateSent: '' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' } } },
-
-      { id: 'p17', jobName: 'MELBOURNE DET P309', ref: '240281-P702', receivedDate: '2026-03-25', startedDate: '2026-04-02', ownerId: 'u2', dueDate: '2026-04-24', buildingType: '2 Storey', priority: 'High', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 1, dateSent: '2026-04-03' }, 'DFM - Wall Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'In Progress', hoursSpent: 1, dateSent: '' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 2, dateSent: '2026-04-09' }, 'Update DFM - Wall Panels (2)': { progress: 'Completed', hoursSpent: 2, dateSent: '2026-04-20' }, 'Update DFM - Wall Panels (3)': { progress: 'In Progress', hoursSpent: 1, dateSent: '' } } },
-
-      { id: 'p18', jobName: 'MELBOURNE END P44', ref: '240281-P701', receivedDate: '2026-03-25', startedDate: '2026-03-30', ownerId: 'u2', dueDate: '2026-04-20', buildingType: '2 Storey', priority: 'High', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 6, dateSent: '2026-04-02' }, 'DFM - Wall Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'In Progress', hoursSpent: 7, dateSent: '' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 2, dateSent: '2026-04-09' }, 'Update DFM - Wall Panels (2)': { progress: 'Completed', hoursSpent: 2, dateSent: '2026-04-20' }, 'Update DFM - Wall Panels (3)': { progress: 'In Progress', hoursSpent: 1, dateSent: '' } } },
-
-      { id: 'p19', jobName: 'SOMERBY P66', ref: '240281-P705', receivedDate: '2026-03-25', startedDate: '2026-03-30', ownerId: 'u4', dueDate: '2026-05-08', buildingType: '2 Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 6.5, dateSent: '2026-04-02' }, 'DFM - Wall Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 2.5, dateSent: '2026-04-08' } } },
-
+      { id: 'p1', jobName: 'Fletcher (Mid)', ref: 'FL-T', receivedDate: '2025-12-02', startedDate: '2025-12-05', ownerId: 'u1', dueDate: '2026-01-09', buildingType: '2.5-Storey', priority: 'High', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 3, dateSent: '2026-01-14' }, 'DFM - Wall Panels': { progress: 'Completed', hoursSpent: 12, dateSent: '2026-01-14' }, 'DFM - Floor Cassette': { progress: 'Completed', hoursSpent: 5, dateSent: '2026-01-14' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 5, dateSent: '2026-01-14' }, 'Update DFM - Wall Panels (2)': { progress: 'Completed', hoursSpent: 47.5, dateSent: '2026-02-13' }, 'Update DFM - Wall Panels (3)': { progress: 'In Progress', hoursSpent: 31, dateSent: '' } } },
+      { id: 'p2', jobName: 'Fuller', ref: 'FR-D', receivedDate: '2025-12-02', startedDate: '2025-12-17', ownerId: 'u2', dueDate: '2026-01-16', buildingType: '2-Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 8.5, dateSent: '2026-01-07' }, 'DFM - Wall Panels': { progress: 'Completed', hoursSpent: 23, dateSent: '2026-01-07' }, 'DFM - Floor Cassette': { progress: 'Completed', hoursSpent: 7.5, dateSent: '2026-01-07' }, 'DFM - Roof Panels': { progress: 'Completed', hoursSpent: 4, dateSent: '2026-02-13' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 10.5, dateSent: '2026-02-13' }, 'Update DFM - Wall Panels (2)': { progress: 'Completed', hoursSpent: 21.5, dateSent: '2026-03-27' } } },
+      { id: 'p3', jobName: 'Lacemaker', ref: 'LA-S', receivedDate: '2025-12-02', startedDate: '2025-12-18', ownerId: 'u3', dueDate: '2026-01-16', buildingType: '2.5-Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 10, dateSent: '2026-01-14' }, 'DFM - Wall Panels': { progress: 'Completed', hoursSpent: 41, dateSent: '2026-01-14' }, 'DFM - Floor Cassette': { progress: 'Completed', hoursSpent: 28.5, dateSent: '2026-01-14' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'In Progress', hoursSpent: 5, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 1, dateSent: '2026-01-16' }, 'Update DFM - Wall Panels (2)': { progress: 'Completed', hoursSpent: 33, dateSent: '2026-02-13' }, 'Update DFM - Wall Panels (3)': { progress: 'Completed', hoursSpent: 51, dateSent: '2026-03-24' } } },
+      { id: 'p4', jobName: 'Manciple-Life (End)', ref: 'MP-S', receivedDate: '2025-12-02', startedDate: '2025-12-17', ownerId: 'u4', dueDate: '2026-01-16', buildingType: '2-Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 8.5, dateSent: '2026-01-07' }, 'DFM - Wall Panels': { progress: 'Completed', hoursSpent: 16.5, dateSent: '2026-01-07' }, 'DFM - Floor Cassette': { progress: 'Completed', hoursSpent: 12, dateSent: '2026-01-07' }, 'DFM - Roof Panels': { progress: 'Completed', hoursSpent: 4, dateSent: '2026-02-12' }, 'DFM - Lookouts': { progress: 'In Progress', hoursSpent: 8, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 17, dateSent: '2026-02-12' }, 'Update DFM - Wall Panels (2)': { progress: 'Completed', hoursSpent: 19.5, dateSent: '2026-03-24' } } },
+      { id: 'p5', jobName: 'Manciple-Life (Mid)', ref: 'MP-T', receivedDate: '2025-12-02', startedDate: '2025-12-17', ownerId: 'u4', dueDate: '2026-01-16', buildingType: '2-Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 3.5, dateSent: '2026-01-09' }, 'DFM - Wall Panels': { progress: 'Completed', hoursSpent: 12.5, dateSent: '2026-01-09' }, 'DFM - Floor Cassette': { progress: 'Completed', hoursSpent: 4, dateSent: '2026-01-09' }, 'DFM - Roof Panels': { progress: 'Completed', hoursSpent: 1, dateSent: '2026-02-12' }, 'DFM - Lookouts': { progress: 'In Progress', hoursSpent: 5.5, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 8, dateSent: '2026-02-12' }, 'Update DFM - Wall Panels (2)': { progress: 'Completed', hoursSpent: 22, dateSent: '2026-03-24' } } },
+      { id: 'p6', jobName: 'Milliner', ref: 'MI-D', receivedDate: '2025-12-02', startedDate: '2025-12-17', ownerId: 'u5', dueDate: '2026-01-23', buildingType: '2-Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 11.5, dateSent: '2026-01-09' }, 'DFM - Wall Panels': { progress: 'Completed', hoursSpent: 27.5, dateSent: '2026-01-09' }, 'DFM - Floor Cassette': { progress: 'Completed', hoursSpent: 19, dateSent: '2026-01-09' }, 'DFM - Roof Panels': { progress: 'Completed', hoursSpent: 8.5, dateSent: '2026-02-13' }, 'DFM - Lookouts': { progress: 'In Progress', hoursSpent: 4, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 23, dateSent: '2026-02-24' }, 'Update DFM - Wall Panels (2)': { progress: 'Completed', hoursSpent: 35, dateSent: '2026-03-24' }, 'Update DFM - Wall Panels (3)': { progress: 'Completed', hoursSpent: 10.5, dateSent: '2026-03-30' } } },
+      { id: 'p7', jobName: 'Milliner-Life', ref: 'SR-D', receivedDate: '2025-12-02', startedDate: '2025-09-01', ownerId: 'u5', dueDate: '2026-01-23', buildingType: '2-Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'In Progress', hoursSpent: 2, dateSent: '' }, 'DFM - Wall Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' } } },
+      { id: 'p8', jobName: 'Quilter', ref: 'QU-D', receivedDate: '2025-12-02', startedDate: '2026-01-06', ownerId: 'u2', dueDate: '2026-01-23', buildingType: '2-Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 6, dateSent: '2026-01-15' }, 'DFM - Wall Panels': { progress: 'Completed', hoursSpent: 12, dateSent: '2026-01-15' }, 'DFM - Floor Cassette': { progress: 'Completed', hoursSpent: 10, dateSent: '2026-01-15' }, 'DFM - Roof Panels': { progress: 'Completed', hoursSpent: 3, dateSent: '2026-02-13' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 7.5, dateSent: '2026-02-13' }, 'Update DFM - Wall Panels (2)': { progress: 'Completed', hoursSpent: 19, dateSent: '2026-03-27' } } },
+      { id: 'p9', jobName: 'Reedmaker-Life', ref: 'RE-D', receivedDate: '2025-12-02', startedDate: '2026-01-12', ownerId: 'u5', dueDate: '2026-01-23', buildingType: '2-Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 6.5, dateSent: '2026-01-21' }, 'DFM - Wall Panels': { progress: 'Completed', hoursSpent: 20, dateSent: '2026-01-21' }, 'DFM - Floor Cassette': { progress: 'Completed', hoursSpent: 14, dateSent: '2026-01-21' }, 'DFM - Roof Panels': { progress: 'Completed', hoursSpent: 6, dateSent: '2026-02-13' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 15.5, dateSent: '2026-02-13' }, 'Update DFM - Wall Panels (2)': { progress: 'Completed', hoursSpent: 34, dateSent: '2026-03-31' } } },
+      { id: 'p10', jobName: 'Silversmith', ref: 'SI-D', receivedDate: '2025-12-02', startedDate: '2026-01-08', ownerId: 'u4', dueDate: '2026-01-30', buildingType: '2-Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 9, dateSent: '2026-01-21' }, 'DFM - Wall Panels': { progress: 'Completed', hoursSpent: 16, dateSent: '2026-01-21' }, 'DFM - Floor Cassette': { progress: 'Completed', hoursSpent: 16, dateSent: '2026-01-21' }, 'DFM - Roof Panels': { progress: 'Completed', hoursSpent: 3, dateSent: '2026-02-12' }, 'DFM - Lookouts': { progress: 'In Progress', hoursSpent: 8.5, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 15, dateSent: '2026-02-12' }, 'Update DFM - Wall Panels (2)': { progress: 'Completed', hoursSpent: 23.5, dateSent: '2026-03-25' } } },
+      { id: 'p11', jobName: 'Slater', ref: 'SL-S', receivedDate: '2025-12-02', startedDate: '2026-01-12', ownerId: 'u3', dueDate: '2026-01-30', buildingType: '2-Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 4.5, dateSent: '2026-01-21' }, 'DFM - Wall Panels': { progress: 'Completed', hoursSpent: 11.5, dateSent: '2026-01-21' }, 'DFM - Floor Cassette': { progress: 'Completed', hoursSpent: 8, dateSent: '2026-01-21' }, 'DFM - Roof Panels': { progress: 'Completed', hoursSpent: 3.5, dateSent: '2026-02-13' }, 'DFM - Lookouts': { progress: 'In Progress', hoursSpent: 3, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 21, dateSent: '2026-02-13' }, 'Update DFM - Wall Panels (2)': { progress: 'Completed', hoursSpent: 42, dateSent: '2026-03-25' }, 'Update DFM - Wall Panels (3)': { progress: 'Completed', hoursSpent: 11, dateSent: '2026-03-30' } } },
+      { id: 'p12', jobName: 'Poet', ref: 'PT-L', receivedDate: '2026-03-16', startedDate: '2026-03-23', ownerId: 'u1', dueDate: '2026-04-07', buildingType: '2-Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 11, dateSent: '2026-03-24' }, 'DFM - Wall Panels': { progress: 'In Progress', hoursSpent: 21, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'In Progress', hoursSpent: 12.5, dateSent: '' }, 'DFM - Roof Panels': { progress: 'In Progress', hoursSpent: 8.5, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'In Progress', hoursSpent: 14.5, dateSent: '' } } },
+      { id: 'p13', jobName: 'Sailmaker', ref: 'SA-L', receivedDate: '2026-03-16', startedDate: '2026-03-23', ownerId: 'u1', dueDate: '2026-04-09', buildingType: '2.5-Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 9, dateSent: '2026-03-26' }, 'DFM - Wall Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' } } },
+      { id: 'p14', jobName: 'Sailmaker - Support', ref: 'SA-L', receivedDate: '2026-03-16', startedDate: '2026-03-30', ownerId: 'u3', dueDate: '2026-04-09', buildingType: '2.5-Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Wall Panels': { progress: 'In Progress', hoursSpent: 26, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'In Progress', hoursSpent: 19.5, dateSent: '' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'In Progress', hoursSpent: 4.5, dateSent: '' } } },
+      { id: 'p15', jobName: 'Wainwright', ref: 'WW', receivedDate: '2026-03-16', startedDate: '2026-03-26', ownerId: 'u1', dueDate: '2026-04-16', buildingType: '2.5-Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 6.5, dateSent: '2026-03-27' }, 'DFM - Wall Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' } } },
+      { id: 'p16', jobName: 'Wainwright - Support', ref: 'WW', receivedDate: '2026-03-16', startedDate: '2026-03-31', ownerId: 'u4', dueDate: '2026-04-16', buildingType: '2.5-Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Wall Panels': { progress: 'In Progress', hoursSpent: 16.5, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'In Progress', hoursSpent: 14.5, dateSent: '' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' } } },
+      { id: 'p17', jobName: 'MELBOURNE DET P309', ref: '240281-P702', receivedDate: '2026-03-25', startedDate: '2026-04-02', ownerId: 'u2', dueDate: '2026-04-24', buildingType: '2-Storey', priority: 'High', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 1, dateSent: '2026-04-03' }, 'DFM - Wall Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'In Progress', hoursSpent: 1, dateSent: '' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 2, dateSent: '2026-04-09' }, 'Update DFM - Wall Panels (2)': { progress: 'Completed', hoursSpent: 2, dateSent: '2026-04-20' }, 'Update DFM - Wall Panels (3)': { progress: 'In Progress', hoursSpent: 1, dateSent: '' } } },
+      { id: 'p18', jobName: 'MELBOURNE END P44', ref: '240281-P701', receivedDate: '2026-03-25', startedDate: '2026-03-30', ownerId: 'u2', dueDate: '2026-04-20', buildingType: '2-Storey', priority: 'High', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 6, dateSent: '2026-04-02' }, 'DFM - Wall Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'In Progress', hoursSpent: 7, dateSent: '' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 2, dateSent: '2026-04-09' }, 'Update DFM - Wall Panels (2)': { progress: 'Completed', hoursSpent: 2, dateSent: '2026-04-20' }, 'Update DFM - Wall Panels (3)': { progress: 'In Progress', hoursSpent: 1, dateSent: '' } } },
+      { id: 'p19', jobName: 'SOMERBY P66', ref: '240281-P705', receivedDate: '2026-03-25', startedDate: '2026-03-30', ownerId: 'u4', dueDate: '2026-05-08', buildingType: '2-Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 6.5, dateSent: '2026-04-02' }, 'DFM - Wall Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 2.5, dateSent: '2026-04-08' } } },
       { id: 'p20', jobName: 'THORNTON P50', ref: '240281-P706', receivedDate: '2026-03-25', startedDate: '2026-04-03', ownerId: 'u5', dueDate: '2026-05-13', buildingType: 'Bungalow', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 3, dateSent: '2026-04-09' }, 'DFM - Wall Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 4, dateSent: '2026-04-09' } } },
-
-      { id: 'p21', jobName: 'TRITON END FG P377', ref: '240281-P704', receivedDate: '2026-03-25', startedDate: '2026-04-03', ownerId: 'u5', dueDate: '2026-05-08', buildingType: '2 Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'In Progress', hoursSpent: 3.5, dateSent: '' }, 'DFM - Wall Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' } } },
-
-      { id: 'p22', jobName: 'TRITON END P45', ref: '240281-P703', receivedDate: '2026-03-25', startedDate: '2026-03-31', ownerId: 'u5', dueDate: '2026-04-29', buildingType: '2 Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 6.5, dateSent: '2026-04-02' }, 'DFM - Wall Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'In Progress', hoursSpent: 7.5, dateSent: '' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 6, dateSent: '2026-04-09' } } },
-
-      { id: 'p23', jobName: 'WORCESTER P318', ref: '240281-P707', receivedDate: '2026-03-25', startedDate: '2026-04-03', ownerId: 'u2', dueDate: '2026-05-20', buildingType: '2.5 Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 8, dateSent: '2026-04-09' }, 'DFM - Wall Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'In Progress', hoursSpent: 9.5, dateSent: '' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 2.5, dateSent: '2026-04-20' }, 'Update DFM - Wall Panels (2)': { progress: 'In Progress', hoursSpent: 4, dateSent: '' } } }
-
+      { id: 'p21', jobName: 'TRITON END FG P377', ref: '240281-P704', receivedDate: '2026-03-25', startedDate: '2026-04-03', ownerId: 'u5', dueDate: '2026-05-08', buildingType: '2-Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'In Progress', hoursSpent: 3.5, dateSent: '' }, 'DFM - Wall Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' } } },
+      { id: 'p22', jobName: 'TRITON END P45', ref: '240281-P703', receivedDate: '2026-03-25', startedDate: '2026-03-31', ownerId: 'u5', dueDate: '2026-04-29', buildingType: '2-Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 6.5, dateSent: '2026-04-02' }, 'DFM - Wall Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'In Progress', hoursSpent: 7.5, dateSent: '' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 6, dateSent: '2026-04-09' } } },
+      { id: 'p23', jobName: 'WORCESTER P318', ref: '240281-P707', receivedDate: '2026-03-25', startedDate: '2026-04-03', ownerId: 'u2', dueDate: '2026-05-20', buildingType: '2.5-Storey', priority: 'Medium', status: [], phases: { 'Pre-Design': { progress: 'Completed', hoursSpent: 8, dateSent: '2026-04-09' }, 'DFM - Wall Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Floor Cassette': { progress: 'In Progress', hoursSpent: 9.5, dateSent: '' }, 'DFM - Roof Panels': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'DFM - Lookouts': { progress: 'Not Started', hoursSpent: 0, dateSent: '' }, 'Update DFM - Wall Panels': { progress: 'Completed', hoursSpent: 2.5, dateSent: '2026-04-20' }, 'Update DFM - Wall Panels (2)': { progress: 'In Progress', hoursSpent: 4, dateSent: '' } } }
     ];
-
-
 
     // --- MAIN APP COMPONENT ---
 
@@ -1534,6 +1494,9 @@
 
     function StatisticsView({ projects }) {
 
+      const [viewMode, setViewMode] = useState('count'); // 'count' or 'average'
+      const [buildingFilter, setBuildingFilter] = useState('Overall');
+
       const statsData = useMemo(() => {
 
         const stats = {};
@@ -1542,234 +1505,176 @@
 
         const categories = ['Pre-Design', 'Wall Panels', 'Floor Cassette', 'Roof Panels', 'Lookouts', 'Update', 'Correction', 'Variation'];
 
+        const filteredProjects = buildingFilter === 'Overall' 
+            ? projects 
+            : projects.filter(p => p.buildingType === buildingFilter);
 
-
-        projects.forEach(p => {
+        filteredProjects.forEach(p => {
 
           const isVariationJob = p.jobName.toLowerCase().includes('variation');
 
-
-
           Object.entries(p.phases || {}).forEach(([phaseName, phaseData]) => {
 
-            if (phaseData.dateSent) { // Đếm khi đã có Date Sent
-
-              const month = phaseData.dateSent.substring(0, 7); // Lấy YYYY-MM
-
+            if (phaseData.dateSent) {
+              const month = phaseData.dateSent.substring(0, 7);
               allMonths.add(month);
 
-
-
               if (!stats[month]) {
-
                 stats[month] = {};
-
-                categories.forEach(c => stats[month][c] = 0);
-
+                categories.forEach(c => stats[month][c] = { count: 0, hours: 0 });
               }
-
-
 
               let category = null;
-
               if (isVariationJob) {
-
                 category = 'Variation';
-
               } else {
-
                 const pName = phaseName.toLowerCase();
-
                 if (pName.includes('correction')) category = 'Correction';
-
                 else if (pName.includes('update')) category = 'Update';
-
                 else if (pName.includes('pre-design')) category = 'Pre-Design';
-
                 else if (pName.includes('wall panels')) category = 'Wall Panels';
-
                 else if (pName.includes('floor cassette')) category = 'Floor Cassette';
-
                 else if (pName.includes('roof panels')) category = 'Roof Panels';
-
                 else if (pName.includes('lookouts')) category = 'Lookouts';
-
               }
-
-
 
               if (category) {
-
-                stats[month][category]++;
-
+                stats[month][category].count += 1;
+                stats[month][category].hours += parseFloat(phaseData.hoursSpent || 0);
               }
-
             }
-
           });
-
         });
 
-
-
         const sortedMonths = Array.from(allMonths).sort();
-
         return { stats, sortedMonths, categories };
-
-      }, [projects]);
-
-
+      }, [projects, buildingFilter]);
 
       const { stats, sortedMonths, categories } = statsData;
 
-
-
       const formatMonth = (monthString) => {
-
         if (!monthString) return '';
-
         const parts = monthString.split('-');
-
         if(parts.length === 2) {
-
             return `${parts[1]}/${parts[0]}`;
-
         }
-
         return monthString;
-
       };
 
-
-
       return (
-
         <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 max-w-5xl mx-auto">
+          <div className="flex justify-between items-center mb-6 border-b pb-4">
+            <h3 className="text-lg font-extrabold text-slate-800 flex items-center gap-2">
+              <BarChart2 className="w-5 h-5 text-indigo-500" />
+              Completed Tasks Statistics
+            </h3>
+            
+            <div className="flex items-center gap-3">
+              <select 
+                value={buildingFilter}
+                onChange={e => setBuildingFilter(e.target.value)}
+                className="px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500 font-medium bg-white"
+              >
+                <option value="Overall">Overall</option>
+                {BUILDING_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+              </select>
 
-          <h3 className="text-lg font-extrabold text-slate-800 mb-6 flex items-center gap-2 border-b pb-4">
-
-            <BarChart2 className="w-5 h-5 text-indigo-500" />
-
-            Thống kê Task hoàn thành
-
-          </h3>
-
-          
-
-          {sortedMonths.length === 0 ? (
-
-             <p className="text-slate-500 text-center py-8">Chưa có dữ liệu task hoàn thành (cần nhập Date Sent).</p>
-
-          ) : (
-
-            <div className="overflow-x-auto">
-
-              <table className="w-full text-sm text-left border border-slate-200 rounded-lg overflow-hidden">
-
-                <thead className="text-[11px] text-slate-500 uppercase tracking-wider bg-slate-50 border-b border-slate-200 font-bold">
-
-                  <tr>
-
-                    <th className="px-5 py-4 border-r border-slate-200 bg-white sticky left-0 z-10 w-48">Loại Task</th>
-
-                    {sortedMonths.map(m => (
-
-                      <th key={m} className="px-5 py-4 text-center border-r border-slate-200">{formatMonth(m)}</th>
-
-                    ))}
-
-                    <th className="px-5 py-4 text-center text-indigo-700 bg-indigo-50/80">Tổng cộng</th>
-
-                  </tr>
-
-                </thead>
-
-                <tbody className="divide-y divide-slate-100">
-
-                  {categories.map(cat => {
-
-                    let rowTotal = 0;
-
-                    return (
-
-                      <tr key={cat} className="hover:bg-slate-50 transition-colors">
-
-                        <td className="px-5 py-3 font-bold text-slate-700 border-r border-slate-200 bg-white sticky left-0 z-10">{cat}</td>
-
-                        {sortedMonths.map(m => {
-
-                          const val = stats[m][cat];
-
-                          rowTotal += val;
-
-                          return (
-
-                            <td key={m} className="px-5 py-3 text-center border-r border-slate-200 text-slate-600 font-medium">
-
-                              {val || '-'}
-
-                            </td>
-
-                          );
-
-                        })}
-
-                        <td className="px-5 py-3 text-center font-bold text-indigo-700 bg-indigo-50/30">
-
-                          {rowTotal || '-'}
-
-                        </td>
-
-                      </tr>
-
-                    );
-
-                  })}
-
-                  
-
-                  {/* Dòng Tổng cộng các tháng */}
-
-                  <tr className="bg-slate-100 font-extrabold text-slate-800 border-t-2 border-slate-200">
-
-                    <td className="px-5 py-4 border-r border-slate-200 bg-slate-100 sticky left-0 z-10">TỔNG THÁNG</td>
-
-                    {sortedMonths.map(m => {
-
-                      const colTotal = categories.reduce((sum, cat) => sum + stats[m][cat], 0);
-
-                      return (
-
-                        <td key={m} className="px-5 py-4 text-center border-r border-slate-200 text-indigo-700">
-
-                          {colTotal || '-'}
-
-                        </td>
-
-                      );
-
-                    })}
-
-                    <td className="px-5 py-4 text-center text-indigo-800 bg-indigo-100">
-
-                      {categories.reduce((sum, cat) => sum + sortedMonths.reduce((s, m) => s + stats[m][cat], 0), 0) || '-'}
-
-                    </td>
-
-                  </tr>
-
-                </tbody>
-
-              </table>
-
+              <div className="flex gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
+                <button 
+                  onClick={() => setViewMode('count')}
+                  className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${viewMode === 'count' ? 'bg-white text-indigo-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                >
+                  Task Count
+                </button>
+                <button 
+                  onClick={() => setViewMode('average')}
+                  className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${viewMode === 'average' ? 'bg-white text-indigo-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                >
+                  Average Actual Hour
+                </button>
+              </div>
             </div>
-
+          </div>
+          
+          {sortedMonths.length === 0 ? (
+             <p className="text-slate-500 text-center py-8">No completed tasks data available (requires Date Sent).</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm text-left border border-slate-200 rounded-lg overflow-hidden">
+                <thead className="text-[11px] text-slate-500 uppercase tracking-wider bg-slate-50 border-b border-slate-200 font-bold">
+                  <tr>
+                    <th className="px-5 py-4 border-r border-slate-200 bg-white sticky left-0 z-10 w-48">Task Type</th>
+                    {sortedMonths.map(m => (
+                      <th key={m} className="px-5 py-4 text-center border-r border-slate-200">{formatMonth(m)}</th>
+                    ))}
+                    <th className="px-5 py-4 text-center text-indigo-700 bg-indigo-50/80">Total</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {categories.map(cat => {
+                    let rowCount = 0;
+                    let rowHours = 0;
+                    return (
+                      <tr key={cat} className="hover:bg-slate-50 transition-colors">
+                        <td className="px-5 py-3 font-bold text-slate-700 border-r border-slate-200 bg-white sticky left-0 z-10">{cat}</td>
+                        {sortedMonths.map(m => {
+                          const cellData = stats[m][cat];
+                          rowCount += cellData.count;
+                          rowHours += cellData.hours;
+                          
+                          const displayVal = cellData.count === 0 ? '-' : (viewMode === 'count' ? cellData.count : (cellData.hours / cellData.count).toFixed(1));
+                          
+                          return (
+                            <td key={m} className="px-5 py-3 text-center border-r border-slate-200 text-slate-600 font-medium">
+                              {displayVal}
+                            </td>
+                          );
+                        })}
+                        <td className="px-5 py-3 text-center font-bold text-indigo-700 bg-indigo-50/30">
+                          {rowCount === 0 ? '-' : (viewMode === 'count' ? rowCount : (rowHours / rowCount).toFixed(1))}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                  
+                  <tr className="bg-slate-100 font-extrabold text-slate-800 border-t-2 border-slate-200">
+                    <td className="px-5 py-4 border-r border-slate-200 bg-slate-100 sticky left-0 z-10">MONTHLY TOTAL</td>
+                    {sortedMonths.map(m => {
+                      let colCount = 0;
+                      let colHours = 0;
+                      categories.forEach(cat => {
+                        colCount += stats[m][cat].count;
+                        colHours += stats[m][cat].hours;
+                      });
+                      
+                      const displayVal = colCount === 0 ? '-' : (viewMode === 'count' ? colCount : (colHours / colCount).toFixed(1));
+                      
+                      return (
+                        <td key={m} className="px-5 py-4 text-center border-r border-slate-200 text-indigo-700">
+                          {displayVal}
+                        </td>
+                      );
+                    })}
+                    <td className="px-5 py-4 text-center text-indigo-800 bg-indigo-100">
+                      {(() => {
+                        let grandCount = 0;
+                        let grandHours = 0;
+                        categories.forEach(cat => {
+                          sortedMonths.forEach(m => {
+                            grandCount += stats[m][cat].count;
+                            grandHours += stats[m][cat].hours;
+                          });
+                        });
+                        return grandCount === 0 ? '-' : (viewMode === 'count' ? grandCount : (grandHours / grandCount).toFixed(1));
+                      })()}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           )}
-
         </div>
-
       );
-
     }
 
 
@@ -1816,7 +1721,7 @@
 
       const [sortConfig, setSortConfig] = useState({ key: 'receivedDate', direction: 'asc' });
 
-      const [filters, setFilters] = useState({ priority: '', status: '', ownerId: '', buildingType: '' });
+      const [filters, setFilters] = useState({ priority: '', status: '', ownerId: '', buildingType: '', jobName: '' });
 
 
 
@@ -1839,6 +1744,9 @@
           if (filters.ownerId && p.ownerId !== filters.ownerId) return false;
 
           if (filters.buildingType && p.buildingType !== filters.buildingType) return false;
+          
+          if (filters.jobName && !p.jobName.toLowerCase().includes(filters.jobName.toLowerCase())) return false;
+
 
           return true;
 
@@ -1984,7 +1892,7 @@
 
                 {[
 
-                  { label: 'Job Name', key: 'jobName' },
+                  { label: 'Job Name', key: 'jobName', filterable: true, type: 'text' },
 
                   { label: 'Priority', key: 'priority', filterable: true, options: PRIORITIES.map(s => ({ value: s, label: s })) },
 
@@ -2028,25 +1936,35 @@
 
                       <div className="mt-2 font-medium" onClick={e => e.stopPropagation()}>
 
-                        <select
+                        {col.type === 'text' ? (
+                          <input
+                            type="text"
+                            placeholder="Search..."
+                            value={filters[col.key]}
+                            onChange={(e) => setFilters(prev => ({ ...prev, [col.key]: e.target.value }))}
+                            className="w-full min-w-[120px] px-2 py-1.5 border border-slate-200 rounded-lg text-[10px] text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+                          />
+                        ) : (
+                          <select
 
-                          value={filters[col.key]}
+                            value={filters[col.key]}
 
-                          onChange={(e) => setFilters(prev => ({ ...prev, [col.key]: e.target.value }))}
+                            onChange={(e) => setFilters(prev => ({ ...prev, [col.key]: e.target.value }))}
 
-                          className="w-full min-w-[90px] px-2 py-1.5 border border-slate-200 rounded-lg text-[10px] text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+                            className="w-full min-w-[90px] px-2 py-1.5 border border-slate-200 rounded-lg text-[10px] text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
 
-                        >
+                          >
 
-                          <option value="">All</option>
+                            <option value="">All</option>
 
-                          {col.options.map(opt => (
+                            {col.options.map(opt => (
 
-                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                              <option key={opt.value} value={opt.value}>{opt.label}</option>
 
-                          ))}
+                            ))}
 
-                        </select>
+                          </select>
+                        )}
 
                       </div>
 
@@ -2223,25 +2141,16 @@
 
 
     function JobProgressModal({ job, currentUser, users, onClose, onSave, onDelete }) {
-
       const [phasesForm, setPhasesForm] = useState({ ...job.phases });
-
       const [jobInfoForm, setJobInfoForm] = useState({
-
         jobName: job.jobName || '',
-
         status: extractStatuses(job),
-
         priority: extractPriority(job),
-
         ref: job.ref || '',
-
         ownerId: job.ownerId || '',
-
-        startedDate: job.startedDate || ''
-
+        startedDate: job.startedDate || '',
+        buildingType: job.buildingType || ''
       });
-
       const [optAction, setOptAction] = useState('');
 
       const [optTarget, setOptTarget] = useState('');
@@ -2741,63 +2650,48 @@
                 <div className="flex flex-wrap gap-4 mt-4 bg-white/50 p-3 rounded-xl border border-indigo-100/50">
 
                   <div className="flex flex-col gap-1">
-
                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Ref</span>
-
                     {isEditable ? (
-
-                      <input type="text" value={jobInfoForm.ref} onChange={e => handleInfoChange('ref', e.target.value)} className="px-2 py-1 text-xs border border-slate-200 rounded focus:ring-1 focus:ring-indigo-500 outline-none" placeholder="Enter Ref..." />
-
+                      <input type="text" value={jobInfoForm.ref} onChange={e => handleInfoChange('ref', e.target.value)} className="px-2 py-1 text-xs border border-slate-200 rounded focus:ring-1 focus:ring-indigo-500 outline-none bg-white" placeholder="Enter Ref..." />
                     ) : (
-
                       <span className="text-xs font-bold text-slate-700">{jobInfoForm.ref || 'N/A'}</span>
-
                     )}
-
                   </div>
 
                   <div className="flex flex-col gap-1">
-
                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Started Date</span>
-
                     {isEditable ? (
-
-                      <input type="date" value={jobInfoForm.startedDate} onChange={e => handleInfoChange('startedDate', e.target.value)} className="px-2 py-1 text-xs border border-slate-200 rounded focus:ring-1 focus:ring-indigo-500 outline-none" />
-
+                      <input type="date" value={jobInfoForm.startedDate} onChange={e => handleInfoChange('startedDate', e.target.value)} className="px-2 py-1 text-xs border border-slate-200 rounded focus:ring-1 focus:ring-indigo-500 outline-none bg-white" />
                     ) : (
-
                       <span className="text-xs font-bold text-slate-700">{formatDate(jobInfoForm.startedDate) || '-'}</span>
-
                     )}
-
                   </div>
 
                   <div className="flex flex-col gap-1">
-
                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Owner</span>
-
                     {isEditable && currentUser.role === 'Manager' ? (
-
-                      <select value={jobInfoForm.ownerId} onChange={e => handleInfoChange('ownerId', e.target.value)} className="px-2 py-1 text-xs border border-slate-200 rounded focus:ring-1 focus:ring-indigo-500 outline-none">
-
+                      <select value={jobInfoForm.ownerId} onChange={e => handleInfoChange('ownerId', e.target.value)} className="px-2 py-1 text-xs border border-slate-200 rounded focus:ring-1 focus:ring-indigo-500 outline-none bg-white">
                         <option value="">Unassigned</option>
-
                         {staffUsers.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
-
                       </select>
-
                     ) : (
-
                       <span className="text-xs font-bold text-indigo-600">{users.find(u => u.id === jobInfoForm.ownerId)?.name || 'Unassigned'}</span>
-
                     )}
-
                   </div>
 
+                  <div className="flex flex-col gap-1">
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Building Type</span>
+                    {isEditable ? (
+                      <select value={jobInfoForm.buildingType} onChange={e => handleInfoChange('buildingType', e.target.value)} className="px-2 py-1 text-xs border border-slate-200 rounded focus:ring-1 focus:ring-indigo-500 outline-none bg-white">
+                        <option value="">Select...</option>
+                        {BUILDING_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+                      </select>
+                    ) : (
+                      <span className="text-xs font-bold text-slate-700">{jobInfoForm.buildingType || '-'}</span>
+                    )}
+                  </div>
                 </div>
-
               </div>
-
               <div className="flex items-center gap-2 shrink-0">
 
                 {isEditable && (
